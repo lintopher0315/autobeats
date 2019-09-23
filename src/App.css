@@ -31,3 +31,43 @@
     transform: rotate(360deg);
   }
 }
+
+canvas {
+  display: block;
+}
+
+#title {
+  font-family: 'Turret Road';
+  color: white;
+  position: absolute;
+  z-index: 100;
+  display: block;
+  width: 100%;
+  font-size: 130px;
+  top: 300px;
+  text-align: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+#bt {
+  font-family: 'Exo';
+  position: absolute;
+  z-index: 100;
+  top: 600px;
+  transition: .3s all ease-in-out;
+}
+
+#bt:hover {
+  background: black;
+  transition: .3s all ease-in-out;
+  color: white;
+}
+
+#d {
+  display: flex;
+  justify-content: center;
+}
