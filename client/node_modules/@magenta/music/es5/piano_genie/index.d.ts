@@ -1,0 +1,1 @@
+export { PianoGenie } from './model';
