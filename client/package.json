@@ -8,7 +8,10 @@
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.12",
     "react-dom": "^16.8.6",
+    "react-router": "^5.1.1",
+    "react-router-dom": "^5.1.1",
     "react-scripts": "2.1.8",
+    "spotify-web-api-js": "^1.2.0",
     "three": "^0.108.0"
   },
   "scripts": {

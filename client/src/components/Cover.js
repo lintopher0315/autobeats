@@ -99,7 +99,7 @@ class Cover extends Component {
             <div>
                 <div id="title">autobeats</div>
                 <div id="d">
-                    <Button id="bt" variant="light" href="http://localhost:8888/">CONNECT</Button>
+                    <Button id="bt" variant="light" href="http://localhost:8888/login">CONNECT</Button>
                 </div>
             </div>
         );

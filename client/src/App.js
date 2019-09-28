@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import Cover from './components/Cover.js';
+import Router from './components/Router';
 
 class App extends Component {
   
     render() {
         return (
-			<Cover />
+			<Router />
         )
     };
 }
