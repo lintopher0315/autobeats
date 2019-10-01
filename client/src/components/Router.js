@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Cover from './Cover';
-import Home from './Home';
+import Home from './Home.js';
 
 class Router extends Component {
 

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
+import { Navbar, Nav } from 'react-bootstrap';
+import Sidebar from './Sidebar.js';
+import "./Sidebar.css";
 
 const spotifyWrapper = new Spotify();
 
@@ -9,6 +12,17 @@ class Home extends Component {
         super(props);
 
         const parameters = this.getHashParams();
+
+        const content= [
+            {
+                icon: 'icon-class-name',
+                label: 'Label of Item',
+            },
+            {
+                icon: 'icon-class-name',
+                label: 'Second Item'
+            }
+        ];
 
         if (parameters.access_token) {
             spotifyWrapper.setAccessToken(parameters.access_token);
@@ -44,12 +58,24 @@ class Home extends Component {
     render() {
         this.getPlaylists();
         return (
-            <div>
-                {this.state.verified ? (
-                    <p>{this.state.playlistNames}</p>
-                ) : (
-                    <p>Not verified</p>
-                )}
+            <div id="Home">
+                <Sidebar pageWrapId={"page-wrap"} outerContainerId={"Home"} />
+                <div id="page-wrap">
+                    <Navbar bg="light" expand="lg">
+                        <Navbar.Brand ></Navbar.Brand>
+                        <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className="ml-auto">
+                                <Nav.Link>Home</Nav.Link>
+                                <Nav.Link>Playlists</Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Navbar>
+                    {this.state.verified ? (
+                        <p>{this.state.playlistNames}</p>
+                    ) : (
+                        <p>Not verified</p>
+                    )}
+                </div>
             </div>
         );
     }
