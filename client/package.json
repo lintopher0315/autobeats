@@ -15,6 +15,7 @@
     "react-router": "^5.1.1",
     "react-router-dom": "^5.1.1",
     "react-scripts": "2.1.8",
+    "react-sidebar": "^3.0.2",
     "spotify-web-api-js": "^1.2.0",
     "three": "^0.108.0"
   },

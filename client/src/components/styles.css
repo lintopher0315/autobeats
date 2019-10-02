@@ -37,3 +37,40 @@ canvas {
     display: flex;
     justify-content: center;
 }
+
+#side {
+    border-radius: 0;
+    border: 0px solid transparent;
+    width: 200px;
+    height: 50px;
+    text-align: left;
+    font-family: 'Muli';
+    background: linear-gradient(to right, #374254, #465773);
+}
+
+#side:hover {
+    background: #1e3440;
+}
+
+#side:focus {
+    outline: none;
+    box-shadow: none;
+    background: #16262e; 
+}
+
+#header {
+    background: #435f7a;
+    background: linear-gradient(to right, #546683, #404c5e);
+    opacity: 0.75;
+}
+
+#name {
+    font-size: 28px;
+    margin-top: 7px;
+}
+
+html body {
+    background: linear-gradient(to right bottom, #6d8dab, #1c3144);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
