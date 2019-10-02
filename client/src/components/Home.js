@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
-import { Navbar, Nav, Button } from 'react-bootstrap';
+import { Navbar, Nav, Button, Image } from 'react-bootstrap';
 import Sidebar from 'react-sidebar';
 
 const spotifyWrapper = new Spotify();
@@ -73,9 +73,9 @@ class Home extends Component {
                         <Navbar.Brand ></Navbar.Brand>
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ml-auto">
-                                <Nav.Link>Home</Nav.Link>
-                                <Nav.Link>Profile</Nav.Link>
-                                <Nav.Link>Settings</Nav.Link>
+                                <Nav.Link><img src={require("../res/rsz_icons8-home-50.png")}/></Nav.Link>
+                                <Nav.Link><img src={require("../res/rsz_icons8-cat-profile-50.png")}/></Nav.Link>
+                                <Nav.Link><img src={require("../res/rsz_icons8-settings-50.png")}/></Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>
