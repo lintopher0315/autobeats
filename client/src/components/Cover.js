@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './styles.css';
 import * as THREE from 'three';
+
 import Button from 'react-bootstrap/Button';
 
 class Cover extends Component {

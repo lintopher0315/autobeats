@@ -3,6 +3,8 @@ import Spotify from 'spotify-web-api-js';
 import { Navbar, Nav, Button, Image } from 'react-bootstrap';
 import Sidebar from 'react-sidebar';
 
+import Container from './Container';
+
 const spotifyWrapper = new Spotify();
 
 class Home extends Component {
@@ -19,6 +21,7 @@ class Home extends Component {
         this.state = {
             verified: parameters.access_token ? true : false,
             playlistNames: [],
+            displayName: "",
         }
     }
 
@@ -33,6 +36,13 @@ class Home extends Component {
             })
     }
 
+    getDisplayName() {
+        spotifyWrapper.getMe()
+            .then((res) => {
+                this.setState({displayName: res.display_name});
+            })
+    }
+
     getHashParams() {
         var hashParams = {};
         var e, r = /([^&;=]+)=?([^&;]*)/g,
@@ -41,10 +51,14 @@ class Home extends Component {
            hashParams[e[1]] = decodeURIComponent(e[2]);
         }
         return hashParams;
-      }
+    }
+
+    componentDidMount() {
+        this.getPlaylists();
+        this.getDisplayName();
+    }
 
     render() {
-        this.getPlaylists();
         return (
             <div id="Home">
                 <Sidebar
@@ -73,17 +87,18 @@ class Home extends Component {
                         <Navbar.Brand ></Navbar.Brand>
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ml-auto">
-                                <Nav.Link><img src={require("../res/rsz_icons8-home-50.png")}/></Nav.Link>
-                                <Nav.Link><img src={require("../res/rsz_icons8-cat-profile-50.png")}/></Nav.Link>
-                                <Nav.Link><img src={require("../res/rsz_icons8-settings-50.png")}/></Nav.Link>
+                                <Nav.Link className="header-bt"><img src={require("../res/rsz_icons8-home-50.png")}/></Nav.Link>
+                                <Nav.Link className="header-bt"><img src={require("../res/rsz_icons8-cat-profile-50.png")}/></Nav.Link>
+                                <Nav.Link className="header-bt"><img src={require("../res/rsz_icons8-settings-50.png")}/></Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>
-                    {this.state.verified ? (
+                    {/*{this.state.verified ? (
                         <p>{this.state.playlistNames}</p>
                     ) : (
-                        <p></p>
-                    )}
+                        <p>Not verified</p>
+                    )}*/}
+                    <Container name={this.state.displayName} />
                 </div>
             </div>
         );

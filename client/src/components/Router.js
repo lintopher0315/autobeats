@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
+
 import Cover from './Cover';
 import Home from './Home.js';
 
