@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
-import { Navbar, Nav, Button, Image } from 'react-bootstrap';
+import { Navbar, Nav, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import Sidebar from 'react-sidebar';
 
 import Container from './Container';
@@ -19,6 +20,8 @@ class Home extends Component {
         }
 
         this.state = {
+            params: parameters.access_token,
+            refresh: parameters.refresh_token,
             verified: parameters.access_token ? true : false,
             playlistNames: [],
             displayName: "",
@@ -31,7 +34,7 @@ class Home extends Component {
                 let playlistInfo = res;
                 this.setState({playlistNames: []});
                 for (let i = 0; i < playlistInfo.items.length; i++) {
-                    this.setState({playlistNames: [...this.state.playlistNames, playlistInfo.items[i].name]});
+                    this.setState({playlistNames: [...this.state.playlistNames, {"name": playlistInfo.items[i].name, "id": playlistInfo.items[i].id}]});
                 }
             })
     }
@@ -65,7 +68,9 @@ class Home extends Component {
                     sidebar={
                         <div>
                             <p id="name">autobeats</p>
-                            <Button id="side" variant="dark">Your Playlists</Button>
+                            <Link to={{pathname: "/home/userplaylists", hash: this.props.location.hash, state: { fromDashboard: true }}}>
+                                <Button id="side" variant="dark">Your Playlists</Button>
+                            </Link>
                             <Button id="side" variant="dark">Public Playlists</Button>
                             <Button id="side" variant="dark">Recently Played</Button>
                         </div>
@@ -87,18 +92,20 @@ class Home extends Component {
                         <Navbar.Brand ></Navbar.Brand>
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ml-auto">
-                                <Nav.Link className="header-bt"><img src={require("../res/rsz_icons8-home-50.png")}/></Nav.Link>
+                                
+                                <Nav.Link className="header-bt">
+                                    <Link to='/home'>
+                                        <img src={require("../res/rsz_icons8-home-50.png")}/>
+                                    </Link>
+                                </Nav.Link>
+                                
                                 <Nav.Link className="header-bt"><img src={require("../res/rsz_icons8-cat-profile-50.png")}/></Nav.Link>
                                 <Nav.Link className="header-bt"><img src={require("../res/rsz_icons8-settings-50.png")}/></Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>
-                    {/*{this.state.verified ? (
-                        <p>{this.state.playlistNames}</p>
-                    ) : (
-                        <p>Not verified</p>
-                    )}*/}
-                    <Container name={this.state.displayName} />
+
+                    <Container name={this.state.displayName} playlists={this.state.playlistNames} params={this.state.params} />
                 </div>
             </div>
         );

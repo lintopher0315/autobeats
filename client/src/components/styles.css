@@ -97,6 +97,15 @@ canvas {
     margin-left: 270px;
 }
 
+#top-fill-container {
+    width: 1470px;
+    height: 800px;
+    margin-left: 270px;
+    background: linear-gradient(to right bottom, #304c5a, #3a5f70);
+    opacity: 0.6;
+    box-shadow: 2px 2px 10px;
+}
+
 #inner-container {
     background: linear-gradient(to right bottom, #304c5a, #3a5f70);
     opacity: 0.6;
@@ -116,9 +125,64 @@ canvas {
     -webkit-touch-callout: none;
 }
 
+#header-text {
+    margin-left: 30px;
+    height: 150px;
+    font-family: 'Montserrat';
+    font-size: 60px;
+    color: white;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+}
+
 #sub-text {
     font-size: 24px;
     margin-left: 25px;
+}
+
+#list-text {
+    font-family: 'Maven Pro';
+    background: #183546;
+    font-size: 36px;
+    padding-left: 25px;
+    margin-left: 30px;
+    margin-top: 20px;
+    height: 75px;
+    width: 1330px;
+    opacity: 0.75;
+    box-shadow: 2px 2px 5px black;
+    line-height: 75px;
+    transition: .2s all ease-in-out;
+}
+
+#list-text:hover {
+    background: #112835;
+    transition: .2s all ease-in-out;
+}
+
+#play-button {
+    margin-bottom: 7px;
+    margin-right: 20px;
+    border: 2px solid rgb(194, 189, 189);
+    background: #183546;
+    width: 50px;
+    height: 50px;
+    padding: 10px 12px;
+    border-radius: 35px;
+    font-size: 24px;
+    line-height: 0.95;
+}
+
+#play-button:hover {
+    width: 55px;
+    height: 55px;
+}
+
+#play-icon {
+    background: #183546;
 }
 
 html body {

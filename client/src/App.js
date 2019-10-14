@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-import Router from './components/Router';
+import WebRouter from './components/WebRouter';
 import Home from './components/Home';
 
 class App extends Component {
   
     render() {
         return (
-			<Router />
+			<WebRouter />
         )
     };
 }

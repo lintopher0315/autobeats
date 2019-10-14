@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, withRouter, Route } from 'react-router-dom';
 
-import Welcome from './Welcome'
+import Welcome from './Welcome';
+import UserPlaylists from './UserPlaylists';
 
 class Container extends Component {
 
@@ -12,10 +13,13 @@ class Container extends Component {
     render() {
         return (
             <div className="container-class">
-                <Welcome name={this.props.name} />
+                <Switch>
+                    <Route exact path='/home' component={() => <Welcome name={this.props.name} />} />
+                    <Route path='/home/userplaylists' component={() => <UserPlaylists playlists={this.props.playlists} params={this.props.params} />} />
+                </Switch>
             </div>
         );
     }
 }
 
-export default Container;
+export default withRouter(Container);
