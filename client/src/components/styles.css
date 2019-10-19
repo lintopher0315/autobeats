@@ -185,6 +185,33 @@ canvas {
     background: #183546;
 }
 
+#control {
+    background: #353a41;
+    height: 100px;
+}
+
+#info {
+    font-family: 'Lato';
+}
+
+#track-title {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 23px;
+}
+
+#artist-title {
+    color: rgb(209, 200, 200);
+    margin-bottom: 27px;;
+}
+
+#control-button {
+    background: #353a41;
+    border-radius: 0;
+    border: 0px solid transparent;
+}
+
 html body {
     background: linear-gradient(to right bottom, #6d8dab, #1c3144);
     background-repeat: no-repeat;

@@ -14,8 +14,8 @@ class Container extends Component {
         return (
             <div className="container-class">
                 <Switch>
-                    <Route exact path='/home' component={() => <Welcome name={this.props.name} />} />
-                    <Route path='/home/userplaylists' component={() => <UserPlaylists playlists={this.props.playlists} params={this.props.params} />} />
+                    <Route exact path='/home' component={() => <Welcome name={this.props.name} location={this.props.location} />} />
+                    <Route path='/home/userplaylists' component={() => <UserPlaylists playlists={this.props.playlists} location={this.props.location} />} />
                 </Switch>
             </div>
         );

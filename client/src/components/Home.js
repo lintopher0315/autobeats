@@ -68,7 +68,7 @@ class Home extends Component {
                     sidebar={
                         <div>
                             <p id="name">autobeats</p>
-                            <Link to={{pathname: "/home/userplaylists", hash: this.props.location.hash, state: { fromDashboard: true }}}>
+                            <Link to={{pathname: "/home/userplaylists", hash: this.props.location.hash}}>
                                 <Button id="side" variant="dark">Your Playlists</Button>
                             </Link>
                             <Button id="side" variant="dark">Public Playlists</Button>
@@ -94,7 +94,7 @@ class Home extends Component {
                             <Nav className="ml-auto">
                                 
                                 <Nav.Link className="header-bt">
-                                    <Link to='/home'>
+                                    <Link to={{pathname: '/home', hash: this.props.location.hash}}>
                                         <img src={require("../res/rsz_icons8-home-50.png")}/>
                                     </Link>
                                 </Nav.Link>
@@ -105,7 +105,7 @@ class Home extends Component {
                         </Navbar.Collapse>
                     </Navbar>
 
-                    <Container name={this.state.displayName} playlists={this.state.playlistNames} params={this.state.params} />
+                    <Container name={this.state.displayName} playlists={this.state.playlistNames} location={this.props.location} />
                 </div>
             </div>
         );

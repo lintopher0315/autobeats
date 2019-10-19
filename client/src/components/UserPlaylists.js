@@ -13,7 +13,7 @@ class UserPlaylists extends Component {
 
         let list = this.props.playlists.map((playlist, i) => {
             return <div key={i} id="list-text">
-                <Link to={{pathname: '/player', state: {id: playlist.id, params: this.props.params}}}>
+                <Link to={{pathname: '/player', state: {id: playlist.id}, hash: this.props.location.hash}}>
                     <Button id="play-button">
                         <img id="play-icon" src={require("../res/icons8-play-26.png")}/>
                     </Button>
