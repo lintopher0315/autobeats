@@ -78,6 +78,8 @@ canvas {
 }
 
 #name {
+    color: white;
+    font-family: 'Turret Road';
     font-size: 28px;
     margin-top: 7px;
     -webkit-user-select: none;
@@ -188,6 +190,8 @@ canvas {
 #control {
     background: #353a41;
     height: 100px;
+    position: absolute;
+    bottom: 0;
 }
 
 #info {
@@ -216,4 +220,6 @@ html body {
     background: linear-gradient(to right bottom, #6d8dab, #1c3144);
     background-repeat: no-repeat;
     background-attachment: fixed;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }

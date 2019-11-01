@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
 import { Button, Container, Row, Col } from 'react-bootstrap';
+import * as THREE from 'three';
 
 const spotifyWrapper = new Spotify();
 
@@ -46,6 +47,133 @@ class Player extends Component {
     componentDidMount() {
         this.getTracks();
         this.handlePlayer();
+
+        let camera, scene, renderer;
+
+        const mouse = new THREE.Vector2();
+        const target = new THREE.Vector2();
+        const windowHalf = new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2);
+
+        let init = () => {
+            
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
+            camera.position.z = 50;
+
+            scene = new THREE.Scene();
+            
+
+            const geometry = new THREE.PlaneBufferGeometry(4, 4, 1, 1);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0x000000,
+                side: THREE.DoubleSide,
+                polygonOffset: true,
+                polygonOffsetFactor: 1,
+                polygonOffsetUnits: 1
+            });
+
+            let id = 0;
+            for (let j = 10; j > 0; j--) {
+                for (let i = 0; i < 16; i++) {
+                    const object = new THREE.Mesh( geometry, material );
+                    if (i / 4 < 1) {
+                        object.position.x = i * 4;
+                        object.position.y = 0;
+                        object.position.z = j * 4;
+                        
+                        object.rotation.x = Math.PI / 2;
+                    }
+                    else if (i / 4 < 2) {
+                        object.position.x = 14;
+                        object.position.y = (i-4) * 4 + 2;
+                        object.position.z = j * 4;
+
+                        object.rotation.y = Math.PI / 2;
+                    }
+                    else if (i / 4 < 3) {
+                        object.position.x = (i-8) * 4;
+                        object.position.y = 16;
+                        object.position.z = j * 4;
+
+                        object.rotation.x = Math.PI / 2;
+                    }
+                    else if (i / 4 < 4) {
+                        object.position.x = -2;
+                        object.position.y = (i-12) * 4 + 2;
+                        object.position.z = j * 4;
+
+                        object.rotation.y = Math.PI / 2;
+                    }
+                    object.position.x -= 5;
+                    object.position.y -= 5;
+                    object.name = id;
+                    id++;
+                    
+                    scene.add(object);
+    
+                    var geo = new THREE.EdgesGeometry(object.geometry);
+                    var mat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 2});
+                    var wireframe = new THREE.LineSegments(geo, mat);
+                    object.add(wireframe);
+                }
+            }
+            
+            renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            document.addEventListener('mousemove', onMouseMove, false);
+            window.addEventListener('resize', onResize, false);
+        }
+
+        let onMouseMove = (event) => {
+            mouse.x = ( event.clientX - windowHalf.x );
+            mouse.y = ( event.clientY - windowHalf.x );
+        }
+
+        let onResize = () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            windowHalf.set( width / 2, height / 2 );
+            
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize( width, height );
+        }
+
+        let animate = () => {
+
+            camera.position.z -= 0.1;
+            for (let i = 0; i < 160; i++) {
+                if (scene.getObjectByName(i).position.z >= camera.position.z) {
+                    scene.getObjectByName(i).position.z -= 40;
+                }
+            }
+
+            target.x = ( 1 - mouse.x ) * 0.002;
+            if (target.x > 0.4) {
+                target.x = 0.4;
+            }
+            if (target.x < -0.4) {
+                target.x = -0.4
+            }
+            target.y = ( 1 - mouse.y ) * 0.002;
+            if (target.y > 0.3) {
+                target.y = 0.3;
+            }
+            if (target.y < -0.75) {
+                target.y = -0.75
+            }
+            
+            camera.rotation.x += 0.01 * ( target.y - camera.rotation.x );
+            camera.rotation.y += 0.01 * ( target.x - camera.rotation.y );
+        
+            requestAnimationFrame( animate );
+            renderer.render( scene, camera );
+        }
+
+        init();
+        animate();
     }
 
     handlePlayer() {
