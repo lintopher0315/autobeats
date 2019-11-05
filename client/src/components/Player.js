@@ -29,6 +29,10 @@ class Player extends Component {
             position: 0,
             duration: 0,
             isCorrectPlaylist: false,
+            isReady: false,
+            currentId: "",
+            currentAnalysis: [],
+            isChangedCurrentId: false,
         }
 
         this.playerCheckInterval = null;
@@ -71,7 +75,6 @@ class Player extends Component {
                 polygonOffsetUnits: 1
             });
 
-            let id = 0;
             for (let j = 10; j > 0; j--) {
                 for (let i = 0; i < 16; i++) {
                     const object = new THREE.Mesh( geometry, material );
@@ -105,8 +108,6 @@ class Player extends Component {
                     }
                     object.position.x -= 5;
                     object.position.y -= 5;
-                    object.name = id;
-                    id++;
                     
                     scene.add(object);
     
@@ -143,26 +144,31 @@ class Player extends Component {
 
         let animate = () => {
 
-            camera.position.z -= 0.1;
-            for (let i = 0; i < 160; i++) {
-                if (scene.getObjectByName(i).position.z >= camera.position.z) {
-                    scene.getObjectByName(i).position.z -= 40;
+            if (this.state.isPlaying) {
+                camera.position.z -= 0.1;
+            }
+
+            if (scene.children[0].position.z >= camera.position.z) {
+                for (let i = 0; i < 16; i++) {
+                    let temp = scene.children.shift();
+                    temp.position.z -= 40;
+                    scene.children.push(temp);
                 }
             }
 
             target.x = ( 1 - mouse.x ) * 0.002;
-            if (target.x > 0.4) {
-                target.x = 0.4;
+            if (target.x > 0.5) {
+                target.x = 0.5;
             }
-            if (target.x < -0.4) {
-                target.x = -0.4
+            if (target.x < -0.5) {
+                target.x = -0.5
             }
             target.y = ( 1 - mouse.y ) * 0.002;
-            if (target.y > 0.3) {
-                target.y = 0.3;
+            if (target.y > 0.35) {
+                target.y = 0.35;
             }
-            if (target.y < -0.75) {
-                target.y = -0.75
+            if (target.y < -0.85) {
+                target.y = -0.85
             }
             
             camera.rotation.x += 0.01 * ( target.y - camera.rotation.x );
@@ -203,7 +209,7 @@ class Player extends Component {
         this.player.on('ready', async data => {
             let { device_id } = data;
             console.log("ready");
-            await this.setState({ deviceId: device_id });
+            await this.setState({ deviceId: device_id, isReady: true });
             this.initiatePlayback();
         })
     }
@@ -215,13 +221,26 @@ class Player extends Component {
                 position,
                 duration,
             } = state.track_window;
+            const currentId = currentTrack.id;
             const trackName = currentTrack.name;
             const albumName = currentTrack.album.name;
             const artistName = currentTrack. artists
                 .map(artist => artist.name)
                 .join(", ");
             const isPlaying = !state.paused;
-            this.setState({position, duration, trackName, albumName, artistName, isPlaying});
+
+            if (currentId === this.state.currentId) {
+                this.setState({isChangedCurrentId: false});
+            }
+            else {
+                this.setState({isChangedCurrentId: true});
+            }
+
+            this.setState({position, duration, trackName, albumName, artistName, isPlaying, currentId}, () => {
+                if (this.state.isChangedCurrentId) {
+                    this.getAudioAnalysis();
+                }
+            });
         }
     }
 
@@ -242,7 +261,6 @@ class Player extends Component {
     setPlaylist() {
         spotifyWrapper.play({"uris": this.state.tracks})
             .then((res) => {
-                console.log(res);
                 this.setState({isCorrectPlaylist: true});
             })
     }
@@ -256,13 +274,23 @@ class Player extends Component {
             })
     }
 
+    getAudioAnalysis() {
+        spotifyWrapper.getAudioAnalysisForTrack(this.state.currentId)
+            .then((res) => {
+                this.setState({currentAnalysis: res});
+            })
+    }
+
     togglePlay() {
-        if (!this.state.isCorrectPlaylist) {
-            this.setPlaylist();
+        if (this.state.isReady) {
+            if (!this.state.isCorrectPlaylist) {
+                this.setPlaylist();
+            }
+            this.setState({isPlaying: !this.state.isPlaying});
+            this.player.togglePlay().then(() => {
+                console.log("toggled");
+            });
         }
-        this.player.togglePlay().then(() => {
-            console.log("toggled");
-        });
     }
 
     prevTrack() {
