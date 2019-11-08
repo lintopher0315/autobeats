@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import * as THREE from 'three';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 const spotifyWrapper = new Spotify();
 
@@ -58,26 +61,30 @@ class Player extends Component {
         const target = new THREE.Vector2();
         const windowHalf = new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2);
 
+        let composer;
+
         let init = () => {
             
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
             camera.position.z = 50;
 
             scene = new THREE.Scene();
-            
 
             const geometry = new THREE.PlaneBufferGeometry(4, 4, 1, 1);
-            const material = new THREE.MeshBasicMaterial({
-                color: 0x000000,
-                side: THREE.DoubleSide,
-                polygonOffset: true,
-                polygonOffsetFactor: 1,
-                polygonOffsetUnits: 1
-            });
 
             for (let j = 10; j > 0; j--) {
                 for (let i = 0; i < 16; i++) {
-                    const object = new THREE.Mesh( geometry, material );
+
+                    let material = new THREE.MeshLambertMaterial({
+                        color: 0x000000,
+                        emissive: 0x000000,
+                        side: THREE.DoubleSide,
+                        polygonOffset: true,
+                        polygonOffsetFactor: 1,
+                        polygonOffsetUnits: 1,
+                    });
+
+                    let object = new THREE.Mesh( geometry, material );
                     if (i / 4 < 1) {
                         object.position.x = i * 4;
                         object.position.y = 0;
@@ -121,7 +128,19 @@ class Player extends Component {
             renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
+            
+            // start of postprocessing
+            composer = new EffectComposer(renderer);
 
+            let renderPass = new RenderPass(scene, camera);
+            composer.addPass(renderPass);
+            renderPass.renderToScreen = true;
+
+            let bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.65, 0.3, 0.2);
+            composer.addPass(bloomPass);
+
+            // end of postprocessing
+            
             document.addEventListener('mousemove', onMouseMove, false);
             window.addEventListener('resize', onResize, false);
         }
@@ -152,16 +171,16 @@ class Player extends Component {
                 for (let i = 0; i < 16; i++) {
                     let temp = scene.children.shift();
                     temp.position.z -= 40;
-                    scene.children.push(temp);
+                    scene.children.splice(159, 0, temp);
                 }
             }
 
             target.x = ( 1 - mouse.x ) * 0.002;
-            if (target.x > 0.5) {
-                target.x = 0.5;
+            if (target.x > 0.35) {
+                target.x = 0.35;
             }
-            if (target.x < -0.5) {
-                target.x = -0.5
+            if (target.x < -0.35) {
+                target.x = -0.35
             }
             target.y = ( 1 - mouse.y ) * 0.002;
             if (target.y > 0.35) {
@@ -175,7 +194,8 @@ class Player extends Component {
             camera.rotation.y += 0.01 * ( target.x - camera.rotation.y );
         
             requestAnimationFrame( animate );
-            renderer.render( scene, camera );
+            //renderer.render( scene, camera );
+            composer.render();
         }
 
         init();
