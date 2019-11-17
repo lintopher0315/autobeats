@@ -122,6 +122,7 @@ class Player extends Component {
                     var mat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 2});
                     var wireframe = new THREE.LineSegments(geo, mat);
                     object.add(wireframe);
+
                 }
             }
             
@@ -228,9 +229,9 @@ class Player extends Component {
 
         this.player.on('ready', async data => {
             let { device_id } = data;
-            console.log("ready");
-            await this.setState({ deviceId: device_id, isReady: true });
-            this.initiatePlayback();
+            this.setState({ deviceId: device_id }, () => {
+                this.initiatePlayback();
+            });
         })
     }
 
@@ -247,7 +248,6 @@ class Player extends Component {
             const artistName = currentTrack. artists
                 .map(artist => artist.name)
                 .join(", ");
-            const isPlaying = !state.paused;
 
             if (currentId === this.state.currentId) {
                 this.setState({isChangedCurrentId: false});
@@ -256,7 +256,7 @@ class Player extends Component {
                 this.setState({isChangedCurrentId: true});
             }
 
-            this.setState({position, duration, trackName, albumName, artistName, isPlaying, currentId}, () => {
+            this.setState({position, duration, trackName, albumName, artistName, currentId}, () => {
                 if (this.state.isChangedCurrentId) {
                     this.getAudioAnalysis();
                 }
@@ -276,12 +276,19 @@ class Player extends Component {
                 "play": false,
             })
         })
+        .then(() => {
+            this.setState({ isReady: true });
+            console.log("ready");
+        })
     }
 
     setPlaylist() {
         spotifyWrapper.play({"uris": this.state.tracks})
             .then((res) => {
-                this.setState({isCorrectPlaylist: true});
+                this.player.togglePlay().then(() => {
+                    this.setState({isCorrectPlaylist: true});
+                });
+                console.log("toggled");
             })
     }
 
@@ -297,19 +304,23 @@ class Player extends Component {
     getAudioAnalysis() {
         spotifyWrapper.getAudioAnalysisForTrack(this.state.currentId)
             .then((res) => {
-                this.setState({currentAnalysis: res});
+                this.setState({currentAnalysis: res}, () => {
+                    console.log(this.state.currentAnalysis);
+                });
             })
     }
 
     togglePlay() {
         if (this.state.isReady) {
+            this.setState({isPlaying: !this.state.isPlaying});
             if (!this.state.isCorrectPlaylist) {
                 this.setPlaylist();
             }
-            this.setState({isPlaying: !this.state.isPlaying});
-            this.player.togglePlay().then(() => {
-                console.log("toggled");
-            });
+            else {
+                this.player.togglePlay().then(() => {
+                    console.log("toggled");
+                });
+            }
         }
     }
 
