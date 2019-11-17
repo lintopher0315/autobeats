@@ -68,11 +68,17 @@ class Home extends Component {
                     sidebar={
                         <div>
                             <p id="name">autobeats</p>
+                            <div id="side-label">LIBRARY</div>
                             <Link to={{pathname: "/home/userplaylists", hash: this.props.location.hash}}>
-                                <Button id="side" variant="dark">Your Playlists</Button>
+                                <Button id="side" variant="dark" style={{'marginTop': '15px'}}>Your Playlists</Button>
                             </Link>
-                            <Button id="side" variant="dark">Public Playlists</Button>
-                            <Button id="side" variant="dark">Recently Played</Button>
+                            <Button id="side" variant="dark">Your Top Tracks</Button>
+
+                            <div id="side-label" style={{'paddingTop': '45px'}}>EXPLORE</div>
+                            <Button id="side" variant="dark" style={{'marginTop': '40px'}}>Categories</Button>
+                            <Button id="side" variant="dark">Featured</Button>
+                            <Button id="side" variant="dark">New Releases</Button>
+                            <Button id="side" variant="dark">Recommendations</Button>
                         </div>
                     }
                     docked={true}
