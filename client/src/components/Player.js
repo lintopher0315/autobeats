@@ -36,6 +36,8 @@ class Player extends Component {
             currentId: "",
             currentAnalysis: [],
             isChangedCurrentId: false,
+            currTime: 0.0,
+            resetTime: false,
         }
 
         this.playerCheckInterval = null;
@@ -51,6 +53,10 @@ class Player extends Component {
         return hashParams;
     }
 
+    round(value, decimals) {
+        return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+    }
+
     componentDidMount() {
         this.getTracks();
         this.handlePlayer();
@@ -62,6 +68,8 @@ class Player extends Component {
         const windowHalf = new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2);
 
         let composer;
+
+        let timer = new THREE.Clock();
 
         let init = () => {
             
@@ -164,6 +172,38 @@ class Player extends Component {
 
         let animate = () => {
 
+            //start of visual synchronization
+
+            if (this.state.resetTime) {
+                timer.stop();
+                this.setState({resetTime: false});
+            }
+
+            if (this.state.isPlaying && this.state.isCorrectPlaylist && !timer.running) {
+                timer.start();
+            }
+            else if (!this.state.isPlaying && timer.running) {
+                this.setState({currTime: this.state.currTime + this.round(timer.getElapsedTime(), 3)});
+                timer.stop();
+            }
+
+            if (this.state.currentAnalysis.length !== 0) {
+                let elapsed = this.state.currTime + this.round(timer.getElapsedTime(), 3);
+                let bars = this.round(this.state.currentAnalysis['bars'][0].start, 3);
+
+                if (Math.abs(elapsed - bars) <= 0.05) {
+                    for (let i = 0; i < scene.children.length; i++) {
+                        scene.children[i].children[0].material.color.setHex(Math.random() * 0xffffff);
+                    }
+                    let temp = this.state.currentAnalysis;
+                    temp['bars'].shift();
+                    this.setState({currentAnalysis: temp});
+                    console.log(this.state.currentAnalysis);
+                }
+            }
+
+            //end of visual synchronization
+
             if (this.state.isPlaying) {
                 camera.position.z -= 0.1;
             }
@@ -258,7 +298,9 @@ class Player extends Component {
 
             this.setState({position, duration, trackName, albumName, artistName, currentId}, () => {
                 if (this.state.isChangedCurrentId) {
+                    console.log("update info");
                     this.getAudioAnalysis();
+                    //this.setState({currTime: 0.0, resetTime: true});
                 }
             });
         }
@@ -306,11 +348,12 @@ class Player extends Component {
             .then((res) => {
                 this.setState({currentAnalysis: res}, () => {
                     console.log(this.state.currentAnalysis);
+                    this.setState({currTime: 0.0, resetTime: true});
                 });
             })
     }
 
-    togglePlay() {
+    toggle() {
         if (this.state.isReady) {
             this.setState({isPlaying: !this.state.isPlaying});
             if (!this.state.isCorrectPlaylist) {
@@ -361,7 +404,7 @@ class Player extends Component {
                         <Button id="control-button" onClick={() => this.prevTrack()}>
                             <img src={require("../res/previous_button.png")}/>
                         </Button>
-                        <Button id="control-button" onClick={() => this.togglePlay()}>
+                        <Button id="control-button" onClick={() => this.toggle()}>
                             <img src={require("../res/play_button.png")}/>
                         </Button>
                         <Button id="control-button" onClick={() => this.nextTrack()}>
