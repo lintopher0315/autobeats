@@ -8,6 +8,16 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 
 const spotifyWrapper = new Spotify();
 
+const neon = 
+    [
+        0xffff00, 0xffff33, 0xf2ea02, 0xe6fb04, 0xff0000, 0xfd1c03, 0xff3300, 0xff6600, 0x00ff00, 0x00ff33, 0x00ff66, 0x33ff00, 0x00ffff, 0x099fff, 0x0062ff, 0x0033ff,
+        0xff00ff, 0xff00cc, 0xff0099, 0xcc00ff, 0x9d00ff, 0xcc00ff, 0x6e0dd0, 0x9900ff, 0x08f7fe, 0x09fbd3, 0xfe53bb, 0xf5d300, 0xffacfc, 0xf148fb, 0x7122fa, 0x560a86,
+        0x75d5fd, 0xb76cfd, 0xff2281, 0x011ffd, 0xfdc7d7, 0xff9de6, 0xa5d8f3, 0xe8e500, 0x00feca, 0xfdf200, 0xff85ea, 0x7b61f8, 0xffd300, 0xde38c8, 0x652ec7, 0x33135c,
+        0xffdef3, 0xff61be, 0xfdd400, 0xfdb232, 0x02b8a2, 0x01535f, 0xfec763, 0xea55b1, 0xa992fa, 0x00207f, 0x79fffe, 0xfea0fe, 0xff8b8b, 0xf85125, 0xce96fb, 0xff8fcf,
+        0x00c2ba, 0x037a90, 0x01ffc3, 0x01ffff, 0xffb3fd, 0x9d72ff, 0xa0edff, 0xebf875, 0x28cf75, 0xfe6b35, 0xffff66, 0xfc6e22, 0xff1493, 0xc24cf6, 0x00a9fe, 0xffe3f1,
+        0x7fff00, 0x0310ea, 0x440bd4, 0xb8fb3c, 0x5ce5d5, 0x8af7e4, 0x48adf1, 0xe1ef7e, 0xffaa01
+    ]
+
 class Player extends Component {
 
     constructor(props) {
@@ -133,6 +143,7 @@ class Player extends Component {
 
                 }
             }
+            //console.log(scene.children[0]);
             
             renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -189,16 +200,41 @@ class Player extends Component {
 
             if (this.state.currentAnalysis.length !== 0) {
                 let elapsed = this.state.currTime + this.round(timer.getElapsedTime(), 3);
-                let bars = this.round(this.state.currentAnalysis['bars'][0].start, 3);
 
-                if (Math.abs(elapsed - bars) <= 0.05) {
-                    for (let i = 0; i < scene.children.length; i++) {
-                        scene.children[i].children[0].material.color.setHex(Math.random() * 0xffffff);
+                if (this.state.currentAnalysis['bars'].length > 0) {
+                    let bars = this.round(this.state.currentAnalysis['bars'][0].start, 3);
+
+                    if (Math.abs(elapsed - bars) <= 0.025) {
+                        for (let i = 0; i < scene.children.length; i++) {
+                            scene.children[i].children[0].material.color.setHex(neon[Math.floor(Math.random() * neon.length)]);
+                        }
+                        let temp = this.state.currentAnalysis;
+                        temp['bars'].shift();
+                        this.setState({currentAnalysis: temp});
+                        console.log(this.state.currentAnalysis);
                     }
-                    let temp = this.state.currentAnalysis;
-                    temp['bars'].shift();
-                    this.setState({currentAnalysis: temp});
-                    console.log(this.state.currentAnalysis);
+                }
+
+                if (this.state.currentAnalysis['beats'].length > 0) {
+                    let beats = this.round(this.state.currentAnalysis['beats'][0].start, 3);
+
+                    if (Math.abs(elapsed - beats) <= 0.025) {
+                        for (let i = 0; i < 10; i++) {
+                            let select = Math.floor(Math.random() * 16);
+
+                            for (let j = 0; j < 16; j++) {
+                                if (select != j) {
+                                    scene.children[(16 * i) + j].material.emissive.setHex(0x000000);
+                                }
+                                else {
+                                    scene.children[(16 * i) + j].material.emissive.setHex(neon[Math.floor(Math.random() * neon.length)]);
+                                }
+                            }
+                        }
+                        let temp = this.state.currentAnalysis;
+                        temp['beats'].shift();
+                        this.setState({currentAnalysis: temp});
+                    }
                 }
             }
 
@@ -318,10 +354,6 @@ class Player extends Component {
                 "play": false,
             })
         })
-        .then(() => {
-            this.setState({ isReady: true });
-            console.log("ready");
-        })
     }
 
     setPlaylist() {
@@ -347,8 +379,9 @@ class Player extends Component {
         spotifyWrapper.getAudioAnalysisForTrack(this.state.currentId)
             .then((res) => {
                 this.setState({currentAnalysis: res}, () => {
+                    console.log("ready");
                     console.log(this.state.currentAnalysis);
-                    this.setState({currTime: 0.0, resetTime: true});
+                    this.setState({currTime: 0.0, resetTime: true, isReady: true});
                 });
             })
     }
