@@ -207,7 +207,7 @@ canvas {
 
 #control {
     background: #353a41;
-    height: 100px;
+    height: 64px;
     position: absolute;
     bottom: 0;
 }
@@ -218,20 +218,54 @@ canvas {
 
 #track-title {
     color: white;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
-    margin-top: 23px;
+    margin-top: 5px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
 }
 
 #artist-title {
     color: rgb(209, 200, 200);
-    margin-bottom: 27px;;
+    margin-bottom: 14px;
+    font-size: 10px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
 }
 
 #control-button {
     background: #353a41;
     border-radius: 0;
     border: 0px solid transparent;
+}
+
+#progress-bar {
+    height: 10px;
+}
+
+#image {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+#player-col-left {
+    padding-left: 0px;
+    padding-right: 0px;
+    flex: 0 0 64px;
+}
+
+#player-col-right {
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 html body {

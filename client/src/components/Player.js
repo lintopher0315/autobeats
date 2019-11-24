@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
-import { Button, Container, Row, Col } from 'react-bootstrap';
+import { Button, Container, Row, Col, ProgressBar, Image } from 'react-bootstrap';
 import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { timingSafeEqual } from 'crypto';
 
 const spotifyWrapper = new Spotify();
 
-const neon = 
+const NEON = 
     [
         0xffff00, 0xffff33, 0xf2ea02, 0xe6fb04, 0xff0000, 0xfd1c03, 0xff3300, 0xff6600, 0x00ff00, 0x00ff33, 0x00ff66, 0x33ff00, 0x00ffff, 0x099fff, 0x0062ff, 0x0033ff,
         0xff00ff, 0xff00cc, 0xff0099, 0xcc00ff, 0x9d00ff, 0xcc00ff, 0x6e0dd0, 0x9900ff, 0x08f7fe, 0x09fbd3, 0xfe53bb, 0xf5d300, 0xffacfc, 0xf148fb, 0x7122fa, 0x560a86,
@@ -33,6 +34,8 @@ class Player extends Component {
             id: this.props.location.state.id,
             params: parameters.access_token,
             tracks: [],
+            tracks_id: [],
+            images: [],
 
             deviceId: "",
             trackName: "",
@@ -48,6 +51,9 @@ class Player extends Component {
             isChangedCurrentId: false,
             currTime: 0.0,
             resetTime: false,
+            isTimerRunning: false,
+            trackProgress: 0,
+            trackIndex: 0,
         }
 
         this.playerCheckInterval = null;
@@ -187,53 +193,82 @@ class Player extends Component {
 
             if (this.state.resetTime) {
                 timer.stop();
-                this.setState({resetTime: false});
+                this.setState({resetTime: false, isTimerRunning: false});
             }
 
             if (this.state.isPlaying && this.state.isCorrectPlaylist && !timer.running) {
                 timer.start();
+                this.setState({isTimerRunning: true});
             }
             else if (!this.state.isPlaying && timer.running) {
-                this.setState({currTime: this.state.currTime + this.round(timer.getElapsedTime(), 3)});
+                this.setState({currTime: this.state.currTime + this.round(timer.getElapsedTime(), 3), isTimerRunning: false});
                 timer.stop();
             }
 
-            if (this.state.currentAnalysis.length !== 0) {
-                let elapsed = this.state.currTime + this.round(timer.getElapsedTime(), 3);
-
-                if (this.state.currentAnalysis['bars'].length > 0) {
-                    let bars = this.round(this.state.currentAnalysis['bars'][0].start, 3);
-
-                    if (Math.abs(elapsed - bars) <= 0.025) {
-                        for (let i = 0; i < scene.children.length; i++) {
-                            scene.children[i].children[0].material.color.setHex(neon[Math.floor(Math.random() * neon.length)]);
-                        }
-                        let temp = this.state.currentAnalysis;
-                        temp['bars'].shift();
-                        this.setState({currentAnalysis: temp});
-                        console.log(this.state.currentAnalysis);
+            if (this.state.isTimerRunning) {
+                if (this.state.currentAnalysis.length !== 0) {
+                    let elapsed = this.state.currTime + this.round(timer.getElapsedTime(), 3);
+    
+                    if (elapsed % 1 < 0.025 || elapsed % 1 > 0.975) {
+                        this.setState({trackProgress: (elapsed / this.state.currentAnalysis['track']['duration']) * 100});
                     }
-                }
-
-                if (this.state.currentAnalysis['beats'].length > 0) {
-                    let beats = this.round(this.state.currentAnalysis['beats'][0].start, 3);
-
-                    if (Math.abs(elapsed - beats) <= 0.025) {
-                        for (let i = 0; i < 10; i++) {
-                            let select = Math.floor(Math.random() * 16);
-
-                            for (let j = 0; j < 16; j++) {
-                                if (select != j) {
-                                    scene.children[(16 * i) + j].material.emissive.setHex(0x000000);
-                                }
-                                else {
-                                    scene.children[(16 * i) + j].material.emissive.setHex(neon[Math.floor(Math.random() * neon.length)]);
+    
+                    if (this.state.currentAnalysis['bars'].length > 0) {
+                        let bars = this.round(this.state.currentAnalysis['bars'][0].start, 3);
+    
+                        if (Math.abs(elapsed - bars) <= 0.025) {
+                            for (let i = 0; i < scene.children.length; i++) {
+                                scene.children[i].children[0].material.color.setHex(NEON[Math.floor(Math.random() * NEON.length)]);
+                            }
+                            let temp = this.state.currentAnalysis;
+                            temp['bars'].shift();
+                            this.setState({currentAnalysis: temp});
+                            console.log(this.state.currentAnalysis);
+                        }
+                    }
+    
+                    if (this.state.currentAnalysis['beats'].length > 0) {
+                        let beats = this.round(this.state.currentAnalysis['beats'][0].start, 3);
+    
+                        if (Math.abs(elapsed - beats) <= 0.025) {
+                            for (let i = 0; i < 10; i++) {
+                                let select = Math.floor(Math.random() * 16);
+    
+                                for (let j = 0; j < 16; j++) {
+                                    if (select != j) {
+                                        scene.children[(16 * i) + j].material.emissive.setHex(0x000000);
+                                    }
+                                    else {
+                                        scene.children[(16 * i) + j].material.emissive.setHex(NEON[Math.floor(Math.random() * NEON.length)]);
+                                    }
                                 }
                             }
+                            let temp = this.state.currentAnalysis;
+                            temp['beats'].shift();
+                            this.setState({currentAnalysis: temp});
                         }
-                        let temp = this.state.currentAnalysis;
-                        temp['beats'].shift();
-                        this.setState({currentAnalysis: temp});
+                    }
+    
+                    if (this.state.currentAnalysis['tatums'].length > 0) {
+                        let tatums = this.round(this.state.currentAnalysis['tatums'][0].start, 3);
+    
+                        if (Math.abs(elapsed - tatums) <= 0.025) {
+                            for (let i = 1; i < 10; i += 2) {
+                                let select = Math.floor(Math.random() * 16);
+    
+                                for (let j = 0; j < 16; j++) {
+                                    if (select != j) {
+                                        scene.children[(16 * i) + j].material.emissive.setHex(0x000000);
+                                    }
+                                    else {
+                                        scene.children[(16 * i) + j].material.emissive.setHex(NEON[Math.floor(Math.random() * NEON.length)]);
+                                    }
+                                }
+                            }
+                            let temp = this.state.currentAnalysis;
+                            temp['tatums'].shift();
+                            this.setState({currentAnalysis: temp});
+                        }
                     }
                 }
             }
@@ -336,7 +371,15 @@ class Player extends Component {
                 if (this.state.isChangedCurrentId) {
                     console.log("update info");
                     this.getAudioAnalysis();
-                    //this.setState({currTime: 0.0, resetTime: true});
+
+                    if (this.state.isReady) {
+                        if (this.state.trackIndex === this.state.tracks_id.length - 1) {
+                            this.setState({trackIndex: 0});
+                        }
+                        else {
+                            this.setState({trackIndex: this.state.trackIndex + 1});
+                        }
+                    }
                 }
             });
         }
@@ -370,8 +413,9 @@ class Player extends Component {
         spotifyWrapper.getPlaylistTracks(this.state.id)
             .then((res) => {
                 for (let i = 0; i < res.items.length; i++) {
-                    this.setState({tracks: [...this.state.tracks, res.items[i].track.uri]});
+                    this.setState({tracks: [...this.state.tracks, res.items[i].track.uri], tracks_id: [...this.state.tracks_id, res.items[i].track.id]});
                 }
+                this.getTrackImages();
             })
     }
 
@@ -383,6 +427,15 @@ class Player extends Component {
                     console.log(this.state.currentAnalysis);
                     this.setState({currTime: 0.0, resetTime: true, isReady: true});
                 });
+            })
+    }
+
+    getTrackImages() {
+        spotifyWrapper.getTracks(this.state.tracks_id)
+            .then((res) => {
+                for (let i = 0; i < res.tracks.length; i++) {
+                    this.setState({images: [...this.state.images, res.tracks[i].album.images[2].url]});
+                }
             })
     }
 
@@ -416,37 +469,50 @@ class Player extends Component {
         return (
             <Container id="control" fluid={true}>
                 <Row>
-                    <Col>
-                        <div id="info">
-                            {this.state.isCorrectPlaylist ? (
-                                <div>
-                                    <div id="track-title">
-                                        {this.state.trackName}
-                                    </div>
-                                    <div id="artist-title">
-                                        {this.state.artistName}
-                                    </div>
-                                </div>
-                            ) : (
-                                <div></div>
-                            )}
-                        </div>
+                    <Col id="player-col-left">
+                        <Image id='image' src={this.state.images[this.state.trackIndex]} round />
                     </Col>
 
-                    <Col>
-                        <Button id="control-button" onClick={() => this.prevTrack()}>
-                            <img src={require("../res/previous_button.png")}/>
-                        </Button>
-                        <Button id="control-button" onClick={() => this.toggle()}>
-                            <img src={require("../res/play_button.png")}/>
-                        </Button>
-                        <Button id="control-button" onClick={() => this.nextTrack()}>
-                            <img src={require("../res/next_button.png")}/>
-                        </Button>
-                    </Col>
+                    <Col id="player-col-right">
+                        <Container fluid={true}>
+                            <Row>
+                                <ProgressBar id='progress-bar' variant="info" now={this.state.trackProgress} isChild={true} />
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div id="info">
+                                        {this.state.isCorrectPlaylist ? (
+                                            <div>
+                                                <div id="track-title">
+                                                    {this.state.trackName}
+                                                </div>
+                                                <div id="artist-title">
+                                                    {this.state.artistName}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div></div>
+                                        )}
+                                    </div>
+                                </Col>
 
-                    <Col>
+                                <Col>
+                                    <Button id="control-button" onClick={() => this.prevTrack()}>
+                                        <img src={require("../res/previous_button.png")}/>
+                                    </Button>
+                                    <Button id="control-button" onClick={() => this.toggle()}>
+                                        <img src={require("../res/play_button.png")}/>
+                                    </Button>
+                                    <Button id="control-button" onClick={() => this.nextTrack()}>
+                                        <img src={require("../res/next_button.png")}/>
+                                    </Button>
+                                </Col>
 
+                                <Col>
+
+                                </Col>
+                            </Row>
+                        </Container>
                     </Col>
                 </Row>
             </Container>
