@@ -5,7 +5,6 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { timingSafeEqual } from 'crypto';
 
 const spotifyWrapper = new Spotify();
 
@@ -367,19 +366,19 @@ class Player extends Component {
                 this.setState({isChangedCurrentId: true});
             }
 
-            this.setState({position, duration, trackName, albumName, artistName, currentId}, () => {
+            if (currentTrack.linked_from.id == null) {
+                this.setState({currentId: currentTrack.id});
+            }
+            else {
+                this.setState({currentId: currentTrack.linked_from.id});
+            }
+
+            this.setState({position, duration, trackName, albumName, artistName}, () => {
                 if (this.state.isChangedCurrentId) {
                     console.log("update info");
                     this.getAudioAnalysis();
 
-                    if (this.state.isReady) {
-                        if (this.state.trackIndex === this.state.tracks_id.length - 1) {
-                            this.setState({trackIndex: 0});
-                        }
-                        else {
-                            this.setState({trackIndex: this.state.trackIndex + 1});
-                        }
-                    }
+                    this.setState({trackIndex: this.state.tracks_id.indexOf(this.state.currentId)});
                 }
             });
         }
@@ -470,16 +469,16 @@ class Player extends Component {
             <Container id="control" fluid={true}>
                 <Row>
                     <Col id="player-col-left">
-                        <Image id='image' src={this.state.images[this.state.trackIndex]} round />
+                        <Image id='image' src={this.state.images[this.state.trackIndex]} />
                     </Col>
 
                     <Col id="player-col-right">
                         <Container fluid={true}>
                             <Row>
-                                <ProgressBar id='progress-bar' variant="info" now={this.state.trackProgress} isChild={true} />
+                                <ProgressBar id='progress-bar' variant="custom" now={this.state.trackProgress} isChild={true} />
                             </Row>
                             <Row>
-                                <Col>
+                                <Col id="player-col-right">
                                     <div id="info">
                                         {this.state.isCorrectPlaylist ? (
                                             <div>
@@ -498,13 +497,13 @@ class Player extends Component {
 
                                 <Col>
                                     <Button id="control-button" onClick={() => this.prevTrack()}>
-                                        <img src={require("../res/previous_button.png")}/>
+                                        <img src={require("../res/thin_prev_button.png")}/>
                                     </Button>
                                     <Button id="control-button" onClick={() => this.toggle()}>
-                                        <img src={require("../res/play_button.png")}/>
+                                        <img src={require("../res/thin_play_button.png")}/>
                                     </Button>
                                     <Button id="control-button" onClick={() => this.nextTrack()}>
-                                        <img src={require("../res/next_button.png")}/>
+                                        <img src={require("../res/thin_next_button.png")}/>
                                     </Button>
                                 </Col>
 

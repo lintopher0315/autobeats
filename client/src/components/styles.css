@@ -46,7 +46,7 @@ canvas {
     text-align: left;
     padding-left: 25px;
     font-family: 'Muli';
-    background: linear-gradient(to right, #374254, #465773);
+    background: rgb(99, 0, 58);
     transition: .2s all ease-in-out;
     color: rgb(250, 250, 250);
 }
@@ -60,7 +60,7 @@ canvas {
     font-size: 18px;
     color: white;
     font-family: 'Signika';
-    background: linear-gradient(to right, #374254, #465773);
+    background:rgb(99, 0, 58);
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
@@ -69,8 +69,7 @@ canvas {
 }
 
 #side:hover {
-    background: #1e3440;
-    text-align: right;
+    background: rgb(61, 0, 36);
     transition: .2s all ease-in-out;
 }
 
@@ -81,8 +80,8 @@ canvas {
 }
 
 #header {
-    background: linear-gradient(to right, #546683, #404c5e);
-    opacity: 0.75;
+    background: rgb(99, 0, 58);
+    opacity: 0.85;
 }
 
 .header-bt {
@@ -91,7 +90,7 @@ canvas {
 }
 
 .header-bt:hover {
-    background: #1e3440;
+    background: rgb(61, 0, 36);
     transition: .2s all ease-in-out;
 }
 
@@ -206,7 +205,7 @@ canvas {
 }
 
 #control {
-    background: #353a41;
+    background: #262626;
     height: 64px;
     position: absolute;
     bottom: 0;
@@ -218,9 +217,10 @@ canvas {
 
 #track-title {
     color: white;
+    padding-left: 8px;
     font-size: 14px;
     font-weight: bold;
-    margin-top: 5px;
+    margin-top: 8px;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
@@ -230,8 +230,9 @@ canvas {
 
 #artist-title {
     color: rgb(209, 200, 200);
-    margin-bottom: 14px;
-    font-size: 10px;
+    padding-left: 8px;
+    margin-bottom: 13px;
+    font-size: 12px;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
@@ -240,13 +241,14 @@ canvas {
 }
 
 #control-button {
-    background: #353a41;
+    background: #262626;
     border-radius: 0;
     border: 0px solid transparent;
 }
 
 #progress-bar {
-    height: 10px;
+    height: 8px;
+    background-color: #605CA8;
 }
 
 #image {
@@ -255,6 +257,8 @@ canvas {
     user-select: none;
     -ms-user-select: none;
     -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
 }
 
 #player-col-left {
@@ -269,7 +273,7 @@ canvas {
 }
 
 html body {
-    background: linear-gradient(to right bottom, #6d8dab, #1c3144);
+    background: linear-gradient(to right bottom, #da4453, #89216b);
     background-repeat: no-repeat;
     background-attachment: fixed;
     overflow-y: hidden;

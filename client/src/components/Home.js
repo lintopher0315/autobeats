@@ -83,11 +83,11 @@ class Home extends Component {
                     }
                     docked={true}
                     styles={{sidebar: {
-                        background: 'linear-gradient(to right, #374254, #465773)',
+                        background: 'rgb(99, 0, 58)',
                         fontFamily: 'Exo',
                         width: '200px',
                         textAlign: 'center',
-                        opacity: 0.75
+                        opacity: 0.85
                         }
                     }}
                 >
