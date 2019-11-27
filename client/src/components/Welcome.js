@@ -1,15 +1,60 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import Spotify from 'spotify-web-api-js';
 import Coverflow from 'react-coverflow';
 
+const spotifyWrapper = new Spotify();
+
 class Welcome extends Component {
+    _isMounted = false;
 
     constructor(props) {
         super(props);
 
+        const parameters = this.getHashParams();
+
+        if (parameters.access_token) {
+            spotifyWrapper.setAccessToken(parameters.access_token);
+        }
+
+        this.state = {
+            images: [],
+        }
+    }
+
+    getHashParams() {
+        var hashParams = {};
+        var e, r = /([^&;=]+)=?([^&;]*)/g,
+            q = window.location.hash.substring(1);
+        while ( e = r.exec(q)) {
+           hashParams[e[1]] = decodeURIComponent(e[2]);
+        }
+        return hashParams;
+    }
+    
+    componentDidMount() {
+        this._isMounted = true;
+        this.getNewReleases();
+    }
+
+    getNewReleases() {
+        spotifyWrapper.getNewReleases({'limit': 10}, (err, res) => {
+            let temp = [];
+            for (let i = 0; i < res.albums.items.length; i++) {
+                temp.push(res.albums.items[i].images[1].url);
+            }
+            if (this._isMounted) {
+                this.setState({images: temp});
+            }
+        })
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     render() {
+
         return (
             <Container id="top-container" fluid={true}>
                 <Row>
@@ -23,16 +68,16 @@ class Welcome extends Component {
                             currentFigureScale={1.0}
                             otherFigureScale={0.75}
                         >
-                            <img src='https://i.scdn.co/image/107819f5dc557d5d0a4b216781c6ec1b2f3c5ab2'/>
-                            <img src='https://i.scdn.co/image/a7b076ed5aa0746a21bc71ab7d2b6ed80dd3ebfe'/>
-                            <img src='https://i.scdn.co/image/ff347680d9e62ccc144926377d4769b02a1024dc'/>
-                            <img src='https://i.scdn.co/image/9f5fa5dfc5e084427eb4627a87bfafb2f200e3a4'/>
-                            <img src='https://i.scdn.co/image/ab67616d00001e02a0caffda54afd0a65995bbab'/>
-                            <img src='https://i.scdn.co/image/f131444c8cf34ed5bb411809e11891d7466a8039'/>
-                            <img src='https://i.scdn.co/image/ab67616d00001e02a4d73b32e40487605c73cffe'/>
-                            <img src='https://i.scdn.co/image/ab67616d00001e02466028b14d6d0023a862e50d'/>
-                            <img src='https://i.scdn.co/image/2c4ced955e63d688e2aeb2152e5469be9571d927'/>
-                            <img src='https://i.scdn.co/image/ab67616d00001e023a2178ae7cf4e68cad643f7e'/>
+                            <img src={this.state.images[0]}/>
+                            <img src={this.state.images[1]}/>
+                            <img src={this.state.images[2]}/>
+                            <img src={this.state.images[3]}/>
+                            <img src={this.state.images[4]}/>
+                            <img src={this.state.images[5]}/>
+                            <img src={this.state.images[6]}/>
+                            <img src={this.state.images[7]}/>
+                            <img src={this.state.images[8]}/>
+                            <img src={this.state.images[9]}/>
                         </Coverflow>
                     </Col>
                 </Row>

@@ -70,15 +70,15 @@ class Home extends Component {
                             <p id="name">autobeats</p>
                             <div id="side-label">LIBRARY</div>
                             <Link to={{pathname: "/home/userplaylists", hash: this.props.location.hash}}>
-                                <Button id="side" variant="dark" style={{'marginTop': '15px'}}>Your Playlists</Button>
+                                <Button id="side" variant="dark" style={{'marginTop': '15px'}}><img id='side-icon' src={require("../res/invert_headphones.png")}/>Your Playlists</Button>
                             </Link>
-                            <Button id="side" variant="dark">Your Top Tracks</Button>
+                            <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_trophy.png")}/>Your Top Tracks</Button>
 
                             <div id="side-label" style={{'paddingTop': '45px'}}>EXPLORE</div>
-                            <Button id="side" variant="dark" style={{'marginTop': '40px'}}>Categories</Button>
-                            <Button id="side" variant="dark">Featured</Button>
-                            <Button id="side" variant="dark">New Releases</Button>
-                            <Button id="side" variant="dark">Recommendations</Button>
+                            <Button id="side" variant="dark" style={{'marginTop': '40px'}}><img id='side-icon' src={require("../res/invert_stack.png")}/>Categories</Button>
+                            <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_fire.png")}/>Featured</Button>
+                            <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_rocket.png")}/>New Releases</Button>
+                            <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_star.png")}/>Recommendations</Button>
                         </div>
                     }
                     docked={true}
@@ -101,12 +101,12 @@ class Home extends Component {
                                 
                                 <Nav.Link className="header-bt">
                                     <Link to={{pathname: '/home', hash: this.props.location.hash}}>
-                                        <img src={require("../res/rsz_icons8-home-50.png")}/>
+                                        <img src={require("../res/invert_home.png")}/>
                                     </Link>
                                 </Nav.Link>
                                 
-                                <Nav.Link className="header-bt"><img src={require("../res/rsz_icons8-cat-profile-50.png")}/></Nav.Link>
-                                <Nav.Link className="header-bt"><img src={require("../res/rsz_icons8-settings-50.png")}/></Nav.Link>
+                                <Nav.Link className="header-bt"><img src={require("../res/invert_profile.png")}/></Nav.Link>
+                                <Nav.Link className="header-bt"><img src={require("../res/invert_settings.png")}/></Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>
