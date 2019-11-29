@@ -68,16 +68,16 @@ class Welcome extends Component {
                             currentFigureScale={1.0}
                             otherFigureScale={0.75}
                         >
-                            <img src={this.state.images[0]}/>
-                            <img src={this.state.images[1]}/>
-                            <img src={this.state.images[2]}/>
-                            <img src={this.state.images[3]}/>
-                            <img src={this.state.images[4]}/>
-                            <img src={this.state.images[5]}/>
-                            <img src={this.state.images[6]}/>
-                            <img src={this.state.images[7]}/>
-                            <img src={this.state.images[8]}/>
-                            <img src={this.state.images[9]}/>
+                            <img id='image' src={this.state.images[0]}/>
+                            <img id='image' src={this.state.images[1]}/>
+                            <img id='image' src={this.state.images[2]}/>
+                            <img id='image' src={this.state.images[3]}/>
+                            <img id='image' src={this.state.images[4]}/>
+                            <img id='image' src={this.state.images[5]}/>
+                            <img id='image' src={this.state.images[6]}/>
+                            <img id='image' src={this.state.images[7]}/>
+                            <img id='image' src={this.state.images[8]}/>
+                            <img id='image' src={this.state.images[9]}/>
                         </Coverflow>
                     </Col>
                 </Row>

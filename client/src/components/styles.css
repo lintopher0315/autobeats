@@ -44,7 +44,7 @@ canvas {
     width: 200px;
     height: 40px;
     text-align: left;
-    padding-left: 19px;
+    padding-left: 13px;
     font-family: 'Muli';
     background: rgb(99, 0, 58);
     transition: .2s all ease-in-out;
@@ -124,9 +124,6 @@ canvas {
     width: 1470px;
     height: 800px;
     margin-left: 270px;
-    background: linear-gradient(to right bottom, #304c5a, #3a5f70);
-    opacity: 0.6;
-    box-shadow: 2px 2px 10px;
 }
 
 #inner-container {
@@ -150,7 +147,7 @@ canvas {
 
 #header-text {
     margin-left: 30px;
-    height: 150px;
+    height: 160px;
     font-family: 'Montserrat';
     font-size: 60px;
     color: white;
@@ -159,6 +156,40 @@ canvas {
     user-select: none;
     -ms-user-select: none;
     -webkit-touch-callout: none;
+}
+
+#slider-container {
+    margin-left: 20px !important;
+    width: 450px !important;
+    background: black;
+}
+
+#slider-container:hover #slider-image {
+    opacity: 0.5
+}
+
+#slider-image {
+    width: 450px;
+    height: 450px;
+    transition: all 0.5s ease;
+}
+
+#playlist-name {
+    width: 450px;
+    text-align: center;
+    color: white;
+    position: absolute;
+    top: 250px;
+    font-family: 'Maven Pro';
+    font-size: 30px;
+    font-weight: 600;
+    opacity: 0;
+    transition: 0.35s ease;
+}
+
+#slider-container:hover #playlist-name {
+    opacity: 1;
+    top: 200px;
 }
 
 #sub-text {
