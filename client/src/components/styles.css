@@ -192,51 +192,76 @@ canvas {
     top: 200px;
 }
 
-#sub-text {
-    font-size: 24px;
-    margin-left: 25px;
+#slider-container-small {
+    margin-left: 95px !important;
+    width: 300px !important;
+    height: 300px !important;
+    position: relative;
+    background: black;
 }
 
-#list-text {
+#slider-container-small:hover #slider-image-small {
+    opacity: 0.5;
+}
+
+#slider-image-small {
+    width: 300px;
+    height: 300px;
+    transition: all 0.5s ease;
+}
+
+#playlist-name-small {
+    width: 300px;
+    text-align: center;
+    color: white;
+    position: absolute;
+    top: 190px;
     font-family: 'Maven Pro';
-    background: #183546;
-    font-size: 36px;
-    padding-left: 25px;
-    margin-left: 30px;
-    margin-top: 20px;
-    height: 75px;
-    width: 1330px;
-    opacity: 0.75;
-    box-shadow: 2px 2px 5px black;
-    line-height: 75px;
-    transition: .2s all ease-in-out;
+    font-size: 30px;
+    font-weight: 600;
+    opacity: 0;
+    transition: 0.35s ease;
 }
 
-#list-text:hover {
-    background: #112835;
-    transition: .2s all ease-in-out;
+#slider-container-small:hover #playlist-name-small {
+    opacity: 1;
+    top: 140px;
 }
 
-#play-button {
-    margin-bottom: 7px;
-    margin-right: 20px;
-    border: 2px solid rgb(194, 189, 189);
-    background: #183546;
-    width: 50px;
-    height: 50px;
-    padding: 10px 12px;
-    border-radius: 35px;
-    font-size: 24px;
-    line-height: 0.95;
+#slider-container-tiny {
+    margin-left: 95px !important;
+    width: 275px !important;
+    height: 275px !important;
+    position: relative;
+    background: black;
 }
 
-#play-button:hover {
-    width: 55px;
-    height: 55px;
+#slider-container-tiny:hover #slider-image-tiny {
+    opacity: 0.5;
 }
 
-#play-icon {
-    background: #183546;
+#slider-image-tiny {
+    width: 275px;
+    height: 275px;
+    transition: all 0.5s ease;
+}
+
+#playlist-name-tiny {
+    width: 275px;
+    text-align: center;
+    color: white;
+    position: absolute;
+    top: 170px;
+    font-family: 'Maven Pro';
+    font-size: 30px;
+    font-weight: 600;
+    opacity: 0;
+    transition: 0.35s ease;
+}
+
+#slider-container-tiny:hover #playlist-name-tiny {
+    opacity: 1;
+    top: 120px;
 }
 
 #control {

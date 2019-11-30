@@ -31,6 +31,7 @@ class Player extends Component {
 
         this.state = {
             id: this.props.location.state.id,
+            type: this.props.location.state.type,
             params: parameters.access_token,
             tracks: [],
             tracks_id: [],
@@ -73,7 +74,7 @@ class Player extends Component {
     }
 
     componentDidMount() {
-        this.getTracks();
+        this.getTracks(this.state.type);
         this.handlePlayer();
 
         let camera, scene, renderer;
@@ -408,14 +409,25 @@ class Player extends Component {
             })
     }
 
-    getTracks() {
-        spotifyWrapper.getPlaylistTracks(this.state.id)
+    getTracks(type) {
+        if (type === 'playlist') {
+            spotifyWrapper.getPlaylistTracks(this.state.id)
             .then((res) => {
                 for (let i = 0; i < res.items.length; i++) {
                     this.setState({tracks: [...this.state.tracks, res.items[i].track.uri], tracks_id: [...this.state.tracks_id, res.items[i].track.id]});
                 }
                 this.getTrackImages();
             })
+        }
+        else if (type === 'album') {
+            spotifyWrapper.getAlbumTracks(this.state.id)
+            .then((res) => {
+                for (let i = 0; i < res.items.length; i++) {
+                    this.setState({tracks: [...this.state.tracks, res.items[i].uri], tracks_id: [...this.state.tracks_id, res.items[i].id]});
+                }
+                this.getTrackImages();
+            })
+        }
     }
 
     getAudioAnalysis() {

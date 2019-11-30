@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
+import Spotify from 'spotify-web-api-js';
 
-class UserPlaylists extends Component {
+const spotifyWrapper = new Spotify();
+
+class Categories extends Component {
     _isMounted = false;
 
     constructor(props) {
@@ -10,10 +13,14 @@ class UserPlaylists extends Component {
 
         const parameters = this.getHashParams();
 
+        if (parameters.access_token) {
+            spotifyWrapper.setAccessToken(parameters.access_token);
+        }
+
         this.state = {
+            categories: [],
             images: [],
             names: [],
-            id: [],
             params: parameters.access_token,
         }
     }
@@ -30,25 +37,18 @@ class UserPlaylists extends Component {
 
     componentDidMount() {
         this._isMounted = true;
-        this.getPlaylistImages();
+        this.getCategoryList();
     }
 
-    getPlaylistImages() {
-        for (let i = 0; i < this.props.playlists.length; i++) {
-            fetch(`https://api.spotify.com/v1/playlists/${this.props.playlists[i].id}/images`, {
-                method: "GET",
-                headers: {
-                    "authorization": `Bearer ${this.state.params}`,
-                    "Content-Type": "application/json",
-                },
-            })
-            .then(res => res.json())
-            .then(json => {
+    getCategoryList() {
+        spotifyWrapper.getCategories()
+            .then((res) => {
                 if (this._isMounted) {
-                    this.setState({images: [...this.state.images, json[0].url], names: [...this.state.names, this.props.playlists[i].name], id: [...this.state.id, this.props.playlists[i].id]});
+                    for (let i = 0; i < res.categories.items.length; i++) {
+                        this.setState({categories: [...this.state.categories, res.categories.items[i].id], images: [...this.state.images, res.categories.items[i].icons[0].url], names: [...this.state.names, res.categories.items[i].name]});
+                    }
                 }
             })
-        }
     }
 
     componentWillUnmount() {
@@ -65,15 +65,16 @@ class UserPlaylists extends Component {
             slidesToScroll: 1,
             autoplay: true,
             autoplaySpeed: 3000,
-            adaptiveHeight: true,
-        };
+            rows: 2,
+            slidesPerRow: 1
+        }
 
-        let list = this.state.images.map((image, i) => {
+        let list = this.state.categories.map((category, i) => {
             return (
-                <div id='slider-container' key={i}>
-                    <Link to={{pathname: '/player', state: {id: this.state.id[i], type: 'playlist'}, hash: this.props.location.hash}}>
-                        <img id='slider-image' src={image}/>
-                        <div id='playlist-name'>
+                <div id='slider-container-tiny' key={i}>
+                    <Link to={{pathname: '/home/categoryplaylists', state: {type: category, name : this.state.names[i]}, hash: this.props.location.hash}}>
+                        <img id='slider-image-tiny' src={this.state.images[i]}/>
+                        <div id='playlist-name-tiny'>
                             {this.state.names[i]}
                         </div>
                     </Link>
@@ -84,14 +85,14 @@ class UserPlaylists extends Component {
         return (
             <div id="top-fill-container">
                 <div id="header-text">
-                    Your Playlists
+                    Categories
                 </div>
                 <Slider {...settings}>
                     {list}
                 </Slider>
             </div>
-        );
+        )
     }
 }
 
-export default UserPlaylists;
+export default Categories;

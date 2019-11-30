@@ -72,13 +72,23 @@ class Home extends Component {
                             <Link to={{pathname: "/home/userplaylists", hash: this.props.location.hash}}>
                                 <Button id="side" variant="dark" style={{'marginTop': '15px'}}><img id='side-icon' src={require("../res/invert_headphones.png")}/>Your Playlists</Button>
                             </Link>
-                            <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_trophy.png")}/>Your Top Tracks</Button>
+                            <Link to={{pathname: "/home/toptracks", hash: this.props.location.hash}}>
+                                <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_trophy.png")}/>Your Top Tracks</Button>
+                            </Link>
 
                             <div id="side-label" style={{'paddingTop': '45px'}}>EXPLORE</div>
-                            <Button id="side" variant="dark" style={{'marginTop': '40px'}}><img id='side-icon' src={require("../res/invert_stack.png")}/>Categories</Button>
-                            <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_fire.png")}/>Featured</Button>
-                            <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_rocket.png")}/>New Releases</Button>
-                            <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_star.png")}/>Recommendations</Button>
+                            <Link to={{pathname: "/home/categories", hash: this.props.location.hash}}>
+                                <Button id="side" variant="dark" style={{'marginTop': '40px'}}><img id='side-icon' src={require("../res/invert_stack.png")}/>Categories</Button>
+                            </Link>
+                            <Link to={{pathname: "/home/featuredplaylists", hash: this.props.location.hash}}>
+                                <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_fire.png")}/>Featured</Button>
+                            </Link>
+                            <Link to={{pathname: "/home/newreleases", hash: this.props.location.hash}}>
+                                <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_rocket.png")}/>New Releases</Button>
+                            </Link>
+                            <Link to={{pathname: "/home/recommendations", hash: this.props.location.hash}}>
+                                <Button id="side" variant="dark"><img id='side-icon' src={require("../res/invert_star.png")}/>Recommendations</Button>
+                            </Link>
                         </div>
                     }
                     docked={true}
