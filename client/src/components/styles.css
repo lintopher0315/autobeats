@@ -38,6 +38,46 @@ canvas {
     justify-content: center;
 }
 
+#cover-icon-left {
+    position: absolute;
+    z-index: 100;
+    bottom: 20px;
+    left: 870px;
+    -webkit-filter: brightness(100%);
+	-moz-filter: brightness(100%);
+	-o-filter: brightness(100%);
+	-ms-filter: brightness(100%);
+	filter: brightness(100%);
+}
+
+#cover-icon-right {
+    position: absolute;
+    z-index: 100;
+    bottom: 20px;
+    right: 870px;
+    -webkit-filter: brightness(100%);
+	-moz-filter: brightness(100%);
+	-o-filter: brightness(100%);
+	-ms-filter: brightness(100%);
+	filter: brightness(100%);
+}
+
+#cover-icon-left:hover {
+    -webkit-filter: brightness(70%);
+	-moz-filter: brightness(70%);
+	-o-filter: brightness(70%);
+	-ms-filter: brightness(70%);
+	filter: brightness(70%);
+}
+
+#cover-icon-right:hover {
+    -webkit-filter: brightness(70%);
+	-moz-filter: brightness(70%);
+	-o-filter: brightness(70%);
+	-ms-filter: brightness(70%);
+	filter: brightness(70%);
+}
+
 #side {
     border-radius: 0;
     border: 0px solid transparent;

@@ -101,6 +101,14 @@ class Cover extends Component {
                 <div id="d">
                     <Button id="bt" variant="light" href="http://localhost:8888/login">CONNECT</Button>
                 </div>
+                
+                <a href="https://github.com/lintopher0315/autobeats" target="_blank">
+                    <img id='cover-icon-left' src={require("../res/github-small.png")}/>
+                </a>
+    
+                <a href="https://www.linkedin.com/in/christopher-lin-98146913b/" target="_blank">
+                    <img id='cover-icon-right' src={require("../res/linkedin-small.png")}/>
+                </a>
             </div>
         );
     }
