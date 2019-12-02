@@ -14,6 +14,13 @@ var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
+const mongoose = require('mongoose')
+
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+const db = mongoose.connection
+db.on('error', (error) => console.error(error))
+db.once('open', () => console.log('connected to database'))
+
 var client_id = process.env.CLIENT_ID; // Your client id
 var client_secret = process.env.CLIENT_SECRET; // Your secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
@@ -40,6 +47,11 @@ var app = express();
 app.use(express.static(__dirname + '/public'))
    .use(cors())
    .use(cookieParser());
+
+app.use(express.json())
+
+const userRouter = require('./routes/users')
+app.use('/users', userRouter)
 
 app.get('/login', function(req, res) {
   var state = generateRandomString(16);

@@ -38,7 +38,10 @@ class Cover extends Component {
         
             renderer = new THREE.WebGLRenderer( { antialias: true } );
             renderer.setSize( window.innerWidth, window.innerHeight );
-            document.body.appendChild( renderer.domElement );
+
+            this.domElement = renderer.domElement;
+            //document.body.appendChild( renderer.domElement );
+            this.mount.appendChild(renderer.domElement);
             
             document.addEventListener( 'mousemove', onMouseMove, false );
             window.addEventListener( 'resize', onResize, false );
@@ -85,7 +88,7 @@ class Cover extends Component {
             camera.rotation.x += 0.01 * ( target.y - camera.rotation.x );
             camera.rotation.y += 0.01 * ( target.x - camera.rotation.y );
         
-            requestAnimationFrame( animate );
+            this.requestId = requestAnimationFrame( animate );
             renderer.render( scene, camera );
     
         }
@@ -93,10 +96,16 @@ class Cover extends Component {
         init();
         animate();
     }
+
+    componentWillUnmount() {
+        window.cancelAnimationFrame(this.requestId);
+        this.mount.removeChild(this.domElement);
+    }
     
     render() {
         return (
             <div>
+                <div ref={ref => (this.mount = ref)} />
                 <div id="title">autobeats</div>
                 <div id="d">
                     <Button id="bt" variant="light" href="http://localhost:8888/login">CONNECT</Button>
