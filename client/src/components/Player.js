@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
 import { Button, Container, Row, Col, ProgressBar, Image } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -153,7 +154,10 @@ class Player extends Component {
             
             renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
+
+            this.domElement = renderer.domElement;
+            //document.body.appendChild(renderer.domElement);
+            this.mount.appendChild( renderer.domElement );
             
             // start of postprocessing
             composer = new EffectComposer(renderer);
@@ -305,13 +309,18 @@ class Player extends Component {
             camera.rotation.x += 0.01 * ( target.y - camera.rotation.x );
             camera.rotation.y += 0.01 * ( target.x - camera.rotation.y );
         
-            requestAnimationFrame( animate );
+            this.requestId = requestAnimationFrame( animate );
             //renderer.render( scene, camera );
             composer.render();
         }
 
         init();
         animate();
+    }
+
+    componentWillUnmount() {
+        window.cancelAnimationFrame(this.requestId);
+        this.mount.removeChild(this.domElement);
     }
 
     handlePlayer() {
@@ -478,55 +487,63 @@ class Player extends Component {
 
     render() {
         return (
-            <Container id="control" fluid={true}>
-                <Row>
-                    <Col id="player-col-left">
-                        <Image id='image' src={this.state.images[this.state.trackIndex]} />
-                    </Col>
+            <div>
+                <div ref={ref => (this.mount = ref)} />
+                <Container id="control" fluid={true}>
+                    <Row>
+                        <Col id="player-col-left">
+                            <Image id='image' src={this.state.images[this.state.trackIndex]} />
+                        </Col>
 
-                    <Col id="player-col-right">
-                        <Container fluid={true}>
-                            <Row>
-                                <ProgressBar id='progress-bar' variant="custom" now={this.state.trackProgress} isChild={true} />
-                            </Row>
-                            <Row>
-                                <Col id="player-col-right">
-                                    <div id="info">
-                                        {this.state.isCorrectPlaylist ? (
-                                            <div>
-                                                <div id="track-title">
-                                                    {this.state.trackName}
+                        <Col id="player-col-right">
+                            <Container fluid={true}>
+                                <Row>
+                                    <ProgressBar id='progress-bar' variant="custom" now={this.state.trackProgress} isChild={true} />
+                                </Row>
+                                <Row>
+                                    <Col id="player-col-right">
+                                        <div id="info">
+                                            {this.state.isCorrectPlaylist ? (
+                                                <div>
+                                                    <div id="track-title">
+                                                        {this.state.trackName}
+                                                    </div>
+                                                    <div id="artist-title">
+                                                        {this.state.artistName}
+                                                    </div>
                                                 </div>
-                                                <div id="artist-title">
-                                                    {this.state.artistName}
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div></div>
-                                        )}
-                                    </div>
-                                </Col>
+                                            ) : (
+                                                <div></div>
+                                            )}
+                                        </div>
+                                    </Col>
 
-                                <Col>
-                                    <Button id="control-button" onClick={() => this.prevTrack()}>
-                                        <img src={require("../res/thin_prev_button.png")}/>
-                                    </Button>
-                                    <Button id="control-button" onClick={() => this.toggle()}>
-                                        <img src={require("../res/thin_play_button.png")}/>
-                                    </Button>
-                                    <Button id="control-button" onClick={() => this.nextTrack()}>
-                                        <img src={require("../res/thin_next_button.png")}/>
-                                    </Button>
-                                </Col>
+                                    <Col>
+                                        <Button id="control-button" onClick={() => this.prevTrack()}>
+                                            <img src={require("../res/thin_prev_button.png")}/>
+                                        </Button>
+                                        <Button id="control-button" onClick={() => this.toggle()}>
+                                            <img src={require("../res/thin_play_button.png")}/>
+                                        </Button>
+                                        <Button id="control-button" onClick={() => this.nextTrack()}>
+                                            <img src={require("../res/thin_next_button.png")}/>
+                                        </Button>
+                                        
+                                        <Link to={{pathname: '/home', hash: this.props.location.hash}}>
+                                            <Button>Home</Button>
+                                        </Link>
+                                        
+                                    </Col>
 
-                                <Col>
+                                    <Col>
 
-                                </Col>
-                            </Row>
-                        </Container>
-                    </Col>
-                </Row>
-            </Container>
+                                    </Col>
+                                </Row>
+                            </Container>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
         );
     }
 }
