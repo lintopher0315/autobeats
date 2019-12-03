@@ -20,6 +20,7 @@ class Home extends Component {
         }
 
         this.state = {
+            userID: parameters.userID,
             params: parameters.access_token,
             refresh: parameters.refresh_token,
             verified: parameters.access_token ? true : false,
@@ -121,7 +122,7 @@ class Home extends Component {
                         </Navbar.Collapse>
                     </Navbar>
 
-                    <Container name={this.state.displayName} playlists={this.state.playlistNames} location={this.props.location} />
+                    <Container userID={this.state.userID} name={this.state.displayName} playlists={this.state.playlistNames} location={this.props.location} />
                 </div>
             </div>
         );

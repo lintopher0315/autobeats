@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Spotify from 'spotify-web-api-js';
 import Coverflow from 'react-coverflow';
+import { Card, Icon, Image, Statistic } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css'
 
 const spotifyWrapper = new Spotify();
 
@@ -18,7 +20,11 @@ class Welcome extends Component {
         }
 
         this.state = {
+            userID: this.props.userID,
             images: [],
+            artistInfo: [],
+            numPlays: 0,
+            timePlayed: 0,
         }
     }
 
@@ -35,6 +41,8 @@ class Welcome extends Component {
     componentDidMount() {
         this._isMounted = true;
         this.getNewReleases();
+        this.getRandomArtists();
+        this.getStats();
     }
 
     getNewReleases() {
@@ -49,11 +57,91 @@ class Welcome extends Component {
         })
     }
 
+    getRandomArtists() {
+        spotifyWrapper.search('year:0000-9999', ['artist'], {'limit': 9, 'offset': Math.floor(Math.random() * 1000)}, (err, res) => {
+            for (let i = 0; i < res.artists.items.length; i++) {
+                if (this._isMounted) {
+                    this.setState({artistInfo: [...this.state.artistInfo, res.artists.items[i]]});
+                }
+            }
+        })
+    }
+
+    getStats() {
+        fetch('/users/count', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: this.state.userID,
+                numPlays: 0,
+                timePlayed: 0.0
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(res => res.json())
+        .then(json => {
+            if (this._isMounted) {
+                this.setState({numPlays: json.user.numPlays, timePlayed: json.user.timePlayed}, () => {
+                    console.log(this.state.numPlays + " " + this.state.timePlayed);
+                });
+            }
+        })
+    }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
 
     render() {
+
+        let list = this.state.artistInfo.map((info, i) => {
+            if (info.images == null || info.images[2] == null) {
+                return (
+                    <Card id='artist-info' key={i} color='purple'>
+                        <Card.Content>
+                            <Card.Header id='artist-font'>{info.name}</Card.Header>
+                            <Card.Meta>
+                                <span className='date'>{info.genres.slice(0, 3).join(", ")}</span>
+                            </Card.Meta>
+                        </Card.Content>
+                        <Card.Content extra>
+                            <a>
+                                <Icon name='user' />
+                                {info.followers.total}
+                            </a>
+                            <a id='artist-pop'>
+                                <Icon name='user outline'/>
+                                {info.popularity}
+                            </a>
+                        </Card.Content>
+                    </Card>
+                )
+            }
+            else {
+                return (
+                    <Card id='artist-info' key={i} color='purple'>
+                        <Card.Content>
+                            <Image id='image' src={info.images[2].url} size='mini' floated='right' circular={true} wrapped ui={true} centered/>
+                            <Card.Header id='artist-font'>{info.name}</Card.Header>
+                            <Card.Meta>
+                                <span className='date'>{info.genres.slice(0, 3).join(", ")}</span>
+                            </Card.Meta>
+                        </Card.Content>
+                        <Card.Content extra>
+                            <a>
+                                <Icon name='user' />
+                                {info.followers.total}
+                            </a>
+                            <a id='artist-pop'>
+                                <Icon name='user outline'/>
+                                {info.popularity}
+                            </a>
+                        </Card.Content>
+                    </Card>
+                )
+            }
+        })
 
         return (
             <Container id="top-container" fluid={true}>
@@ -79,6 +167,40 @@ class Welcome extends Component {
                             <img id='image' src={this.state.images[8]}/>
                             <img id='image' src={this.state.images[9]}/>
                         </Coverflow>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col id='stat-col' lg={3}>
+                        <Container fluid={true}>
+                            <Row>
+                                <Col>
+                                    <div id='stat-container'>
+                                        <Statistic size='huge' id='stat-top'>
+                                            <Statistic.Value id='artist-font'>{this.state.numPlays}</Statistic.Value>
+                                            <Statistic.Label id='artist-font'>Total Tracks Played</Statistic.Label>
+                                        </Statistic>
+                                    </div>
+                                </Col>
+                            </Row>
+
+                            <Row>
+                                <Col>
+                                    <div id='stat-container'>
+                                        <Statistic size='huge' id='stat-bottom'>
+                                            <Statistic.Value id='artist-font'>{`${Math.floor(this.state.timePlayed / 3600)}h ${Math.floor(this.state.timePlayed % 3600 / 60)}m`}</Statistic.Value>
+                                            <Statistic.Label id='artist-font'>Total Time Played</Statistic.Label>
+                                        </Statistic>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Col>
+
+                    <Col id='artist-col' lg={9}>
+                        <Card.Group itemsPerRow={3}>
+                            {list}
+                        </Card.Group>
                     </Col>
                 </Row>
             </Container>

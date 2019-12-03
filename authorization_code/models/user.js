@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema({
     numPlays: {
         type: Number,
         required: true
+    },
+    timePlayed: {
+        type: Number,
+        required: true
     }
 })
 

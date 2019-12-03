@@ -115,6 +115,7 @@ app.get('/callback', function(req, res) {
           if (body.product === 'premium') {
             res.redirect('http://localhost:3000/home/#' +
               querystring.stringify({
+                userID: body.id,
                 access_token: access_token,
                 refresh_token: refresh_token
               }));

@@ -55,6 +55,8 @@ class Player extends Component {
             isTimerRunning: false,
             trackProgress: 0,
             trackIndex: 0,
+            numPlays: 0,
+            totTime: 0,
         }
 
         this.playerCheckInterval = null;
@@ -321,6 +323,7 @@ class Player extends Component {
     componentWillUnmount() {
         window.cancelAnimationFrame(this.requestId);
         this.mount.removeChild(this.domElement);
+        this.postStats();
     }
 
     handlePlayer() {
@@ -360,8 +363,8 @@ class Player extends Component {
             const {
                 current_track: currentTrack,
                 position,
-                duration,
             } = state.track_window;
+            const duration = currentTrack.duration_ms;
             const currentId = currentTrack.id;
             const trackName = currentTrack.name;
             const albumName = currentTrack.album.name;
@@ -387,11 +390,24 @@ class Player extends Component {
                 if (this.state.isChangedCurrentId) {
                     console.log("update info");
                     this.getAudioAnalysis();
-
-                    this.setState({trackIndex: this.state.tracks_id.indexOf(this.state.currentId)});
+                    this.setState({trackIndex: this.state.tracks_id.indexOf(this.state.currentId), numPlays: this.state.numPlays + 1, totTime: this.state.totTime + Math.floor(this.state.duration / 1000)});
                 }
             });
         }
+    }
+
+    postStats() {
+        fetch('/users/count', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: this.props.location.state.userID,
+                numPlays: this.state.numPlays,
+                timePlayed: this.state.totTime
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
     }
 
     initiatePlayback() {

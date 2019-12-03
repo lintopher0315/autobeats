@@ -71,7 +71,7 @@ class UserPlaylists extends Component {
         let list = this.state.images.map((image, i) => {
             return (
                 <div id='slider-container' key={i}>
-                    <Link to={{pathname: '/player', state: {id: this.state.id[i], type: 'playlist'}, hash: this.props.location.hash}}>
+                    <Link to={{pathname: '/player', state: {id: this.state.id[i], type: 'playlist', userID: this.props.userID}, hash: this.props.location.hash}}>
                         <img id='slider-image' src={image}/>
                         <div id='playlist-name'>
                             {this.state.names[i]}

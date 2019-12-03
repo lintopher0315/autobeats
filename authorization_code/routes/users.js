@@ -3,16 +3,16 @@ const router = express.Router()
 const User = require('../models/user')
 
 router.post('/count', (req, res) => {
-    console.log("hello")
+    console.log(req.body);
     User.find({'name': req.body.name}, function(err, user) {
         if (user == null || user.length == 0) {
-            User.create({'name': req.body.name, 'numPlays': req.body.numPlays}, (err, user) => {
+            User.create({'name': req.body.name, 'numPlays': req.body.numPlays, 'timePlayed': req.body.timePlayed}, (err, user) => {
                 if (err) throw err;
                 res.send({user: user, status: 200})
             })
         }
         else {
-            User.findOneAndUpdate({'name': req.body.name}, {$inc: {'numPlays': req.body.numPlays}}, (err, user) => {
+            User.findOneAndUpdate({'name': req.body.name}, {$inc: {'numPlays': req.body.numPlays, 'timePlayed': req.body.timePlayed}}, (err, user) => {
                 if (err) throw err;
                 res.send({user: user, status: 200})
             })

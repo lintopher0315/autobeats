@@ -72,7 +72,7 @@ class TopTracks extends Component {
         let list = this.state.albums.map((album, i) => {
             return (
                 <div id='slider-container-small' key={i}>
-                    <Link to={{pathname: '/player', state: {id: album, type: 'album'}, hash: this.props.location.hash}}>
+                    <Link to={{pathname: '/player', state: {id: album, type: 'album', userID: this.props.userID}, hash: this.props.location.hash}}>
                         <img id='slider-image-small' src={this.state.images[i]}/>
                         <div id='playlist-name-small'>
                             {this.state.names[i]}

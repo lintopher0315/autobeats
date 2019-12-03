@@ -81,7 +81,7 @@ class CategoryPlaylists extends Component {
         let list = this.state.playlists.map((playlist, i) => {
             return (
                 <div id='slider-container-small' key={i}>
-                    <Link to={{pathname: '/player', state: {id: playlist, type: 'playlist'}, hash: this.props.location.hash}}>
+                    <Link to={{pathname: '/player', state: {id: playlist, type: 'playlist', userID: this.props.userID}, hash: this.props.location.hash}}>
                         <img id='slider-image-small' src={this.state.images[i]}/>
                         <div id='playlist-name-small'>
                             {this.state.names[i]}

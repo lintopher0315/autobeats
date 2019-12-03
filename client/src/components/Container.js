@@ -20,14 +20,14 @@ class Container extends Component {
         return (
             <div className="container-class">
                 <Switch>
-                    <Route exact path='/home' component={() => <Welcome name={this.props.name} location={this.props.location} />} />
-                    <Route path='/home/userplaylists' component={() => <UserPlaylists playlists={this.props.playlists} location={this.props.location} />} />
-                    <Route path='/home/featuredplaylists' component={() => <FeaturedPlaylists location={this.props.location} />} />
-                    <Route path='/home/newreleases' component={() => <NewReleases location={this.props.location} />} />
-                    <Route path='/home/toptracks' component={() => <TopTracks location={this.props.location} />} />
-                    <Route path='/home/recommendations' component={() => <Recommendations location={this.props.location} />} />
+                    <Route exact path='/home' component={() => <Welcome userID={this.props.userID} name={this.props.name} location={this.props.location} />} />
+                    <Route path='/home/userplaylists' component={() => <UserPlaylists userID={this.props.userID} playlists={this.props.playlists} location={this.props.location} />} />
+                    <Route path='/home/featuredplaylists' component={() => <FeaturedPlaylists userID={this.props.userID} location={this.props.location} />} />
+                    <Route path='/home/newreleases' component={() => <NewReleases userID={this.props.userID} location={this.props.location} />} />
+                    <Route path='/home/toptracks' component={() => <TopTracks userID={this.props.userID} location={this.props.location} />} />
+                    <Route path='/home/recommendations' component={() => <Recommendations userID={this.props.userID} location={this.props.location} />} />
                     <Route path='/home/categories' component={() => <Categories location={this.props.location} />} />
-                    <Route path='/home/categoryplaylists' component={() => <CategoryPlaylists location={this.props.location} />} />
+                    <Route path='/home/categoryplaylists' component={() => <CategoryPlaylists userID={this.props.userID} location={this.props.location} />} />
                 </Switch>
             </div>
         );

@@ -20,6 +20,8 @@
     "react-sidebar": "^3.0.2",
     "react-slick": "^0.25.2",
     "react-spotify-web-playback": "^0.6.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.1",
     "spotify-web-api-js": "^1.2.0",
     "three": "^0.108.0"
   },
