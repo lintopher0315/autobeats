@@ -153,7 +153,40 @@ class Player extends Component {
 
                 }
             }
-            //console.log(scene.children[0]);
+            const panelGeometry = new THREE.PlaneBufferGeometry(50, 32, 1, 1);
+
+            const panelMaterial = new THREE.MeshLambertMaterial({
+                color: 0x000000,
+                emissive: 0x000000,
+                side: THREE.DoubleSide,
+                polygonOffset: true,
+                polygonOffsetFactor: 1,
+                polygonOffsetUnits: 1,
+            });
+
+            let panelLower = new THREE.Mesh(panelGeometry, panelMaterial);
+            let panelUpper = new THREE.Mesh(panelGeometry, panelMaterial);
+
+            var wireGeoLower = new THREE.EdgesGeometry(panelLower.geometry);
+            var wireGeoUpper = new THREE.EdgesGeometry(panelUpper.geometry);
+            var wireMat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 2});
+            var panelWireframeLower = new THREE.LineSegments(wireGeoLower, wireMat);
+            var panelWireframeUpper = new THREE.LineSegments(wireGeoUpper, wireMat);
+            panelLower.add(panelWireframeLower);
+            panelUpper.add(panelWireframeUpper);
+
+            panelLower.position.x = 0;
+            panelLower.position.y = 18;
+            panelLower.position.z = 42.1;
+
+            panelUpper.position.x = 0;
+            panelUpper.position.y = -14;
+            panelUpper.position.z = 42.1;
+
+            scene.add(panelLower);
+            scene.add(panelUpper);
+
+            scene.visible = false;
             
             renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -195,6 +228,10 @@ class Player extends Component {
         }
 
         let animate = () => {
+
+            if (this.state.isCorrectPlaylist) {
+                scene.visible = true;
+            }
 
             //start of visual synchronization
 
@@ -287,6 +324,13 @@ class Player extends Component {
 
             if (this.state.isPlaying) {
                 camera.position.z -= 0.1;
+                if (scene.children.length > 160) {
+                    scene.children[160].position.y += 0.15;
+                    scene.children[161].position.y -= 0.15;
+                    if (camera.position.z < 30) {
+                        scene.children.splice(160, 2);
+                    }
+                }
             }
 
             if (scene.children[0].position.z >= camera.position.z) {
@@ -395,9 +439,7 @@ class Player extends Component {
                     console.log("update info");
                     this.getAudioAnalysis();
                     this.setState({trackIndex: this.state.tracks_id.indexOf(this.state.currentId)});
-                    //if (this.state.isCorrectPlaylist) {
-                        this.setState({numPlays: this.state.numPlays + 1, totTime: this.state.totTime + Math.floor(this.state.duration / 1000)});
-                    //}
+                    this.setState({numPlays: this.state.numPlays + 1, totTime: this.state.totTime + Math.floor(this.state.duration / 1000)});
                 }
             });
         }
