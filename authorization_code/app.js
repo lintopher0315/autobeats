@@ -53,9 +53,6 @@ app.use(express.static(__dirname + '/public'))
 
 app.use(express.json())
 
-const userRouter = require('./routes/users')
-app.use('/users', userRouter)
-
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('../client/build'));
 
@@ -63,6 +60,9 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, "../client/build/index.html"));
   });
 }
+
+const userRouter = require('./routes/users')
+app.use('/users', userRouter)
 
 app.get('/login', function(req, res) {
   var state = generateRandomString(16);
