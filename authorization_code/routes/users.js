@@ -3,7 +3,6 @@ const router = express.Router()
 const User = require('../models/user')
 
 router.post('/count', (req, res) => {
-    console.log(req.body);
     User.find({'name': req.body.name}, function(err, user) {
         if (user == null || user.length == 0) {
             User.create({'name': req.body.name, 'numPlays': req.body.numPlays, 'timePlayed': req.body.timePlayed}, (err, user) => {

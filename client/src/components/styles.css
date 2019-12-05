@@ -346,6 +346,33 @@ canvas {
     border: 0px solid transparent;
 }
 
+#control-button:focus {
+    outline: none;
+}
+
+#control-icon {
+    transition: 0.2s all ease;
+    border-radius: 6px;
+}
+
+#control-icon:hover {
+    color: rgba(255, 255, 255, 1);
+    background: rgba(145, 92, 182, 0.4);
+    box-shadow: 0 5px 25px rgba(145, 92, 182, 0.4);
+}
+
+#player-nested-col {
+    padding-top: 10px;
+}
+
+#player-nested-mid {
+    padding-left: 185px;
+}
+
+#player-nested-right {
+    padding-left: 540px;
+}
+
 #progress-bar {
     height: 8px;
     background-color: #605CA8;

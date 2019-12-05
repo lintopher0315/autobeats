@@ -116,8 +116,6 @@ class Home extends Component {
                                     </Link>
                                 </Nav.Link>
                                 
-                                <Nav.Link className="header-bt"><img src={require("../res/invert_profile.png")}/></Nav.Link>
-                                <Nav.Link className="header-bt"><img src={require("../res/invert_settings.png")}/></Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>

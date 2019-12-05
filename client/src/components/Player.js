@@ -57,6 +57,7 @@ class Player extends Component {
             trackIndex: 0,
             numPlays: 0,
             totTime: 0,
+            showImage: false,
         }
 
         this.playerCheckInterval = null;
@@ -207,8 +208,9 @@ class Player extends Component {
                 this.setState({isTimerRunning: true});
             }
             else if (!this.state.isPlaying && timer.running) {
-                this.setState({currTime: this.state.currTime + this.round(timer.getElapsedTime(), 3), isTimerRunning: false});
-                timer.stop();
+                this.setState({currTime: this.state.currTime + this.round(timer.getElapsedTime(), 3), isTimerRunning: false}, () => {
+                    timer.stop();
+                });
             }
 
             if (this.state.isTimerRunning) {
@@ -216,6 +218,8 @@ class Player extends Component {
                     let elapsed = this.state.currTime + this.round(timer.getElapsedTime(), 3);
     
                     if (elapsed % 1 < 0.025 || elapsed % 1 > 0.975) {
+                        console.log(this.state.currentAnalysis['track']['duration']);
+                        console.log((elapsed / this.state.currentAnalysis['track']['duration']) * 100);
                         this.setState({trackProgress: (elapsed / this.state.currentAnalysis['track']['duration']) * 100});
                     }
     
@@ -390,7 +394,10 @@ class Player extends Component {
                 if (this.state.isChangedCurrentId) {
                     console.log("update info");
                     this.getAudioAnalysis();
-                    this.setState({trackIndex: this.state.tracks_id.indexOf(this.state.currentId), numPlays: this.state.numPlays + 1, totTime: this.state.totTime + Math.floor(this.state.duration / 1000)});
+                    this.setState({trackIndex: this.state.tracks_id.indexOf(this.state.currentId)});
+                    //if (this.state.isCorrectPlaylist) {
+                        this.setState({numPlays: this.state.numPlays + 1, totTime: this.state.totTime + Math.floor(this.state.duration / 1000)});
+                    //}
                 }
             });
         }
@@ -467,17 +474,29 @@ class Player extends Component {
     }
 
     getTrackImages() {
-        spotifyWrapper.getTracks(this.state.tracks_id)
+        if (this.state.tracks_id.length <= 50) {
+            spotifyWrapper.getTracks(this.state.tracks_id)
             .then((res) => {
                 for (let i = 0; i < res.tracks.length; i++) {
                     this.setState({images: [...this.state.images, res.tracks[i].album.images[2].url]});
                 }
             })
+        }
+        else {
+            for (let i = 0; i < Math.ceil(this.state.tracks_id.length / 50.0); i++) {
+                spotifyWrapper.getTracks(this.state.tracks_id.slice(i * 50, (i + 1) * 50))
+                .then((res) => {
+                    for (let i = 0; i < res.tracks.length; i++) {
+                        this.setState({images: [...this.state.images, res.tracks[i].album.images[2].url]});
+                    }
+                })
+            }
+        }
     }
 
     toggle() {
         if (this.state.isReady) {
-            this.setState({isPlaying: !this.state.isPlaying});
+            this.setState({isPlaying: !this.state.isPlaying, showImage: true});
             if (!this.state.isCorrectPlaylist) {
                 this.setPlaylist();
             }
@@ -490,25 +509,46 @@ class Player extends Component {
     }
 
     prevTrack() {
-        this.player.previousTrack().then(() => {
-            console.log("prev track");
-        });
+        if (this.state.isPlaying) {
+            this.player.previousTrack().then(() => {
+                console.log("prev track");
+            });
+        }
     }
 
     nextTrack() {
-        this.player.nextTrack().then(() => {
-            console.log("next track");
-        });
+        if (this.state.isPlaying) {
+            this.player.nextTrack().then(() => {
+                console.log("next track");
+            });
+        }
     }
 
     render() {
+
+        let primButton = 
+            <button id="control-button" onClick={() => this.toggle()}>
+                <img id='control-icon' src={require("../res/play_button.png")}/>
+            </button>
+        if (this.state.isPlaying) {
+                primButton = 
+                    <button id="control-button" onClick={() => this.toggle()}>
+                        <img id='control-icon' src={require("../res/pause_button.png")}/>
+                    </button>
+        }
+
+        let image = <Image id='image'/>
+        if (this.state.showImage) {
+            image = <Image id='image' src={this.state.images[this.state.trackIndex]} />
+        }
+
         return (
             <div>
                 <div ref={ref => (this.mount = ref)} />
                 <Container id="control" fluid={true}>
                     <Row>
                         <Col id="player-col-left">
-                            <Image id='image' src={this.state.images[this.state.trackIndex]} />
+                            {image}
                         </Col>
 
                         <Col id="player-col-right">
@@ -534,25 +574,26 @@ class Player extends Component {
                                         </div>
                                     </Col>
 
-                                    <Col>
-                                        <Button id="control-button" onClick={() => this.prevTrack()}>
-                                            <img src={require("../res/thin_prev_button.png")}/>
-                                        </Button>
-                                        <Button id="control-button" onClick={() => this.toggle()}>
-                                            <img src={require("../res/thin_play_button.png")}/>
-                                        </Button>
-                                        <Button id="control-button" onClick={() => this.nextTrack()}>
-                                            <img src={require("../res/thin_next_button.png")}/>
-                                        </Button>
-                                        
-                                        <Link to={{pathname: '/home', hash: this.props.location.hash}}>
-                                            <Button>Home</Button>
-                                        </Link>
-                                        
+                                    <Col id='player-nested-col'>
+                                        <div id='player-nested-mid'>
+                                            <button id="control-button" onClick={() => this.prevTrack()}>
+                                                <img id='control-icon' src={require("../res/prev_button.png")}/>
+                                            </button>
+                                            {primButton}
+                                            <button id="control-button" onClick={() => this.nextTrack()}>
+                                                <img id='control-icon' src={require("../res/next_button.png")}/>
+                                            </button>
+                                        </div>
                                     </Col>
 
-                                    <Col>
-
+                                    <Col id='player-nested-col'>
+                                        <div id='player-nested-right'>
+                                            <Link to={{pathname: '/home', hash: this.props.location.hash}}>
+                                                <button id='control-button'>
+                                                    <img id='control-icon' src={require("../res/invert_home.png")}/>
+                                                </button>
+                                            </Link>
+                                        </div>
                                     </Col>
                                 </Row>
                             </Container>
