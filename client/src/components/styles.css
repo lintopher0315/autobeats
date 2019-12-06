@@ -416,47 +416,6 @@ canvas {
     padding-left: 10px;
 }
 
-#stat-container {
-    width: 230px !important;
-    height: 230px !important;
-    background: rgba(255, 255, 255, 0.1);
-    margin-top: 22px;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 10px;
-    border-color: white;
-    position: relative;
-    transition: 0.3s all ease;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-    -ms-user-select: none;
-    -webkit-touch-callout: none;
-    -webkit-user-drag: none;
-}
-
-#stat-container:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-#stat-top {
-    position: absolute;
-    top: 25%;
-    left: 16%;
-}
-
-#stat-bottom {
-    position: absolute;
-    top: 8%;
-    left: 3%;
-}
-
-#stat-col {
-    padding-left: 20px;
-    padding-right: 0px;
-    flex: 0 0 250px;
-}
-
 #artist-col {
     padding-left: 35px;
     padding-right: 20px;
