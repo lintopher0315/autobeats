@@ -12,11 +12,13 @@
     "querystring": "^0.2.0",
     "request": "^2.88.0"
   },
+  "engines": {
+    "node": "8.15.0"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node authorization_code/app.js",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "start": "node authorization_code/app.js"
   },
   "repository": {
     "type": "git",
