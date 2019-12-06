@@ -42,7 +42,7 @@ class Welcome extends Component {
         this._isMounted = true;
         this.getNewReleases();
         this.getRandomArtists();
-        this.getStats();
+        //this.getStats();
     }
 
     getNewReleases() {
@@ -173,7 +173,7 @@ class Welcome extends Component {
                 <Row>
                     <Col id='stat-col' lg={3}>
                         <Container fluid={true}>
-                            <Row>
+                            {/*<Row>
                                 <Col>
                                     <div id='stat-container'>
                                         <Statistic size='huge' id='stat-top'>
@@ -182,7 +182,7 @@ class Welcome extends Component {
                                         </Statistic>
                                     </div>
                                 </Col>
-                            </Row>
+                            </Row>*/}
 
                             <Row>
                                 <Col>

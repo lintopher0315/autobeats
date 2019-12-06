@@ -371,7 +371,7 @@ class Player extends Component {
     componentWillUnmount() {
         window.cancelAnimationFrame(this.requestId);
         this.mount.removeChild(this.domElement);
-        this.postStats();
+        //this.postStats();
     }
 
     handlePlayer() {
