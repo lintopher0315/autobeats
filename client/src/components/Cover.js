@@ -108,7 +108,7 @@ class Cover extends Component {
                 <div ref={ref => (this.mount = ref)} />
                 <div id="title">autobeats</div>
                 <div id="d">
-                    <Button id="bt" variant="light" href="http://localhost:8888/login">CONNECT</Button>
+                    <Button id="bt" variant="light" href="http://autobeats.herokuapp.com/login">CONNECT</Button>
                 </div>
                 
                 <a href="https://github.com/lintopher0315/autobeats" target="_blank">
