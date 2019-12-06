@@ -171,7 +171,7 @@ class Welcome extends Component {
                 </Row>
 
                 <Row>
-                    <Col id='artist-col' lg={9}>
+                    <Col id='artist-col' lg={12}>
                         <Card.Group itemsPerRow={4}>
                             {list}
                         </Card.Group>
