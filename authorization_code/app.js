@@ -27,7 +27,7 @@ db.once('open', () => console.log('connected to database'))
 var client_id = process.env.CLIENT_ID; // Your client id
 var client_secret = process.env.CLIENT_SECRET; // Your secret
 //var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
-var redirect_uri = 'http://autobeats.herokuapp.com/callback'; // Your redirect uri
+var redirect_uri = 'https://autobeats.herokuapp.com/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
@@ -123,7 +123,7 @@ app.get('/callback', function(req, res) {
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
           if (body.product === 'premium') {
-            res.redirect('https://heuristic-kare-dabab8.netlify.com/home/#' +
+            res.redirect('https://www.autobeats.io/home/#' +
               querystring.stringify({
                 userID: body.id,
                 access_token: access_token,
@@ -136,7 +136,7 @@ app.get('/callback', function(req, res) {
         });
         // we can also pass the token to the browser to make requests from there
       } else {
-        res.redirect('https://heuristic-kare-dabab8.netlify.com/#' +
+        res.redirect('https://www.autobeats.io/#' +
           querystring.stringify({
             error: 'invalid_token'
           }));
