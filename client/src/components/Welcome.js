@@ -171,32 +171,6 @@ class Welcome extends Component {
                 </Row>
 
                 <Row>
-                    <Col id='stat-col' lg={3}>
-                        <Container fluid={true}>
-                            {/*<Row>
-                                <Col>
-                                    <div id='stat-container'>
-                                        <Statistic size='huge' id='stat-top'>
-                                            <Statistic.Value id='artist-font'>{this.state.numPlays}</Statistic.Value>
-                                            <Statistic.Label id='artist-font'>Total Tracks Played</Statistic.Label>
-                                        </Statistic>
-                                    </div>
-                                </Col>
-                            </Row>*/}
-
-                            <Row>
-                                <Col>
-                                    <div id='stat-container'>
-                                        <Statistic size='huge' id='stat-bottom'>
-                                            <Statistic.Value id='artist-font'>{`${Math.floor(this.state.timePlayed / 3600)}h ${Math.floor(this.state.timePlayed % 3600 / 60)}m`}</Statistic.Value>
-                                            <Statistic.Label id='artist-font'>Total Time Played</Statistic.Label>
-                                        </Statistic>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </Container>
-                    </Col>
-
                     <Col id='artist-col' lg={9}>
                         <Card.Group itemsPerRow={3}>
                             {list}
