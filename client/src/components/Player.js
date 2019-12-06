@@ -446,7 +446,7 @@ class Player extends Component {
     }
 
     postStats() {
-        fetch('/users/count', {
+        fetch('http://autobeats.herokuapp.com/users/count', {
             method: 'POST',
             body: JSON.stringify({
                 name: this.props.location.state.userID,

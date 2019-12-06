@@ -68,7 +68,7 @@ class Welcome extends Component {
     }
 
     getStats() {
-        fetch('/users/count', {
+        fetch('http://autobeats.herokuapp.com/users/count', {
             method: 'POST',
             body: JSON.stringify({
                 name: this.state.userID,
