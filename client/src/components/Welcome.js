@@ -58,7 +58,7 @@ class Welcome extends Component {
     }
 
     getRandomArtists() {
-        spotifyWrapper.search('year:0000-9999', ['artist'], {'limit': 9, 'offset': Math.floor(Math.random() * 1000)}, (err, res) => {
+        spotifyWrapper.search('year:0000-9999', ['artist'], {'limit': 12, 'offset': Math.floor(Math.random() * 1000)}, (err, res) => {
             for (let i = 0; i < res.artists.items.length; i++) {
                 if (this._isMounted) {
                     this.setState({artistInfo: [...this.state.artistInfo, res.artists.items[i]]});
@@ -172,7 +172,7 @@ class Welcome extends Component {
 
                 <Row>
                     <Col id='artist-col' lg={9}>
-                        <Card.Group itemsPerRow={3}>
+                        <Card.Group itemsPerRow={4}>
                             {list}
                         </Card.Group>
                     </Col>
