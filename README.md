@@ -14,6 +14,8 @@ autobeats is an online spotify visualizer that plays music straight from the bro
 
 Utilizing the Spotify API requires the usage of a Spotify Premium account, therefore, you will need a Spotify Premium account to enable playback through the browser.
 
+**NOTE:** Make sure to enable hardware acceleration in your browser
+
 ## Roadmap
 
 - Adding loading indicator between page routes
