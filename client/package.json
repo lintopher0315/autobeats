@@ -6,7 +6,7 @@
     "@brainhubeu/react-carousel": "^1.10.27",
     "@magenta/music": "^1.12.0",
     "bootstrap": "^4.4.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-bulma-components": "^2.3.0",
